@@ -37,8 +37,11 @@ public class Server {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getTimestamp("createdAt"));
+
                 System.out.println(user);
+
             }
+            System.out.println("You're connected to CHADCHAT");
         }
     }
 
