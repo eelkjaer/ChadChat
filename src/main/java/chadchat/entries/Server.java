@@ -35,8 +35,8 @@ public class Server {
             while (rs.next()) {
                 User user = new User(
                         rs.getInt("id"),
-                        rs.getString("username"));
-                        rs.getTimestamp("createdAt");
+                        rs.getString("username"),
+                        rs.getTimestamp("createdAt"));
                 System.out.println(user);
             }
         }
