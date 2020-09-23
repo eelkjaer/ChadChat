@@ -1,0 +1,78 @@
+@startuml
+
+
+package "Domain" {
+class User {
+String username
+int id
+DateTime lastSignIn
+
+User(String name)
+toString()
+getId()
+}
+
+class Channel {
+Int ID
+String name;
+Channel(int ID, String name)
+
+
+}
+
+class Subscription {
+User user
+Channel channel
+enum rights
+DateTime timestamp
+}
+
+interface SubscriptionRepository{
+subscribeToChannel(User user, Channel channel)
+}
+
+interface SubscriptioFactory{
+
+}
+
+interface MessageRepository {
++getMessages(int limit)
++getMessage(int id)
+}
+
+interface MessageFactory{
+
+}
+
+class Message {
+int id
+String messageText
+DateTime timestamp
+User user
++Message(User user, String message)
+}
+}
+
+package "entries" {
+class Server {
+}
+}
+
+package UI {
+class Menu {
+login(User user)
+createUser()
+}
+class Chat {
+
+userOnline()
+}
+
+}
+
+
+
+
+
+
+@enduml
