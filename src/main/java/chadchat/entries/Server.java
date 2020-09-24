@@ -1,11 +1,10 @@
 package chadchat.entries;
 
+import chadchat.domain.Channel;
+import chadchat.domain.Message;
 import chadchat.domain.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Server {
     // The entry point of the ChatChad server
@@ -25,6 +24,7 @@ public class Server {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
+
     private static void dbTest() throws ClassNotFoundException, SQLException {
         Class.forName(JDBC_DRIVER);
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -37,9 +37,7 @@ public class Server {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getTimestamp("createdAt"));
-
                 System.out.println(user);
-
             }
             System.out.println("You're connected to CHADCHAT");
         }
@@ -49,9 +47,6 @@ public class Server {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         // Remove this soon
         dbTest();
+
     }
-
-
-
-
 }

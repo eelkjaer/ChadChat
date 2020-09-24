@@ -13,6 +13,18 @@ public class User {
         this.timestamp = timestamp;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
     @Override
     public String toString() {
         return "User{" +
