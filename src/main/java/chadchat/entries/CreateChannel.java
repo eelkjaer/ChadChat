@@ -20,10 +20,11 @@ public class CreateChannel {
         Class.forName(JDBC_DRIVER);
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             String sql;
-            sql = "INSERT INTO Channel(name) VALUES (?)";
+            sql = "INSERT INTO Channels(name) VALUES (?)";
 
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, name);
+            stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
 
