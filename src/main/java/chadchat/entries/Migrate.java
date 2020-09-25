@@ -1,12 +1,17 @@
 package chadchat.entries;
 
+import chadchat.infrastructure.Database;
+import org.apache.ibatis.jdbc.ScriptRunner;
+
 import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ *
+ */
 public class Migrate {
 
-    /*
     public static void main(String[] args) throws IOException, SQLException {
         runMigrations();
     }
@@ -43,8 +48,5 @@ public class Migrate {
         }
         System.out.println("Done running migration");
     }
-
-     */
-
 
 }
