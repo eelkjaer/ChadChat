@@ -5,4 +5,3 @@ CREATE TABLE properties (
 );
 
 INSERT INTO properties (name, value) VALUES ("version", "0");
-

@@ -4,14 +4,15 @@ import java.sql.*;
 
 public class Database {
     // JDBC driver name and database URL
-    private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql://localhost/chadchat";
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost/chadchat";
 
     // Database credentials
-    private static final String USER = "chadchat";
+    static final String USER = "chadchat";
+    // static final String PASS = "null";
 
     // Database version
-    private static final int version = 0;
+    private static final int version = 1;
 
     public Database() {
         if (getCurrentVersion() != getVersion()) {
@@ -39,6 +40,7 @@ public class Database {
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, null);
+
     }
 
     public static int getVersion() {
