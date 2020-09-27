@@ -1,4 +1,4 @@
-package UI;
+package chadchat.UI;
 
 import java.util.Scanner;
 

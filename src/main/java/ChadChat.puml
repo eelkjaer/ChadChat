@@ -58,7 +58,7 @@ class Server {
 }
 }
 
-package UI {
+package chadchat.UI {
 class Menu {
 login(User user)
 createUser()
