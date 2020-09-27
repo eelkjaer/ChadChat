@@ -2,7 +2,7 @@ package chadchat.domain;
 
 import java.sql.Timestamp;
 
-public class Subsrcibtion {
+public class Subscription {
 
     Message message;
     Channel channel;
@@ -10,7 +10,7 @@ public class Subsrcibtion {
     Timestamp timestamp;
 
 
-    public Subsrcibtion(Message message, Channel channel, UserRights rights, Timestamp timestamp) {
+    public Subscription(Message message, Channel channel, UserRights rights, Timestamp timestamp) {
         this.message = message;
         this.channel = channel;
         this.rights = rights;

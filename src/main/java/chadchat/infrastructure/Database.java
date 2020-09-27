@@ -5,11 +5,11 @@ import java.sql.*;
 public class Database {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/chadchat";
+    static final String DB_URL = "jdbc:mysql://104.248.135.65/ChadChat";
 
     // Database credentials
     static final String USER = "chadchat";
-    // static final String PASS = "null";
+    static final String PASS = "familiebil";
 
     // Database version
     private static final int version = 2;
@@ -39,7 +39,7 @@ public class Database {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, null);
+        return DriverManager.getConnection(DB_URL, USER, PASS);
 
     }
 

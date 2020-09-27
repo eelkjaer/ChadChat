@@ -5,13 +5,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Message {
-    int ID;
+    int id;
     String messageText;
     Timestamp timestamp;
     String user;
 
-    public Message(int ID, String messageText, Timestamp timestamp, String user) {
-        this.ID = ID;
+    public Message(int id, String messageText, Timestamp timestamp, String user) {
+        this.id = id;
         this.messageText = messageText;
         this.timestamp = timestamp;
         this.user = user;
@@ -25,8 +25,12 @@ public class Message {
         return new Message(id, this.messageText, timestamp, user);
     }
 
-    public int getID() {
-        return ID;
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getMessageText() {
