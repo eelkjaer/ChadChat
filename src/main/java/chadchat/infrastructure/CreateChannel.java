@@ -1,4 +1,4 @@
-package chadchat.entries;
+package chadchat.infrastructure;
 
 import java.sql.*;
 
@@ -14,11 +14,11 @@ public class CreateChannel {
 
     //  Database credentials
     static final String USER = "chadchat";
-    static final String PASS = "familiebil";
+    // static final String PASS = "familiebil";
 
     private static void createChannel(String name) throws ClassNotFoundException {
         Class.forName(JDBC_DRIVER);
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, null)) {
             String sql;
             sql = "INSERT INTO Channel(name) VALUES (?)";
 
