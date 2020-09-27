@@ -6,18 +6,19 @@ class User {
 String username
 int id
 DateTime lastSignIn
+String password
 
 User(String name)
 toString()
 getId()
+getPassword()
+getLastSignin()
 }
 
 class Channel {
 Int ID
 String name;
 Channel(int ID, String name)
-
-
 }
 
 class Subscription {
@@ -41,7 +42,6 @@ interface MessageRepository {
 }
 
 interface MessageFactory{
-
 }
 
 class Message {
@@ -56,6 +56,20 @@ User user
 package "entries" {
 class Server {
 }
+class Chat {
+userOnline()
+}
+
+class CmdLine {
+login(User user)
+createUser()
+passwordValidation()
+}
+}
+
+package "infrastructure" {
+class Database {
+}
 }
 
 package UI {
@@ -63,11 +77,6 @@ class Menu {
 login(User user)
 createUser()
 }
-class Chat {
-
-userOnline()
-}
-
 }
 
 

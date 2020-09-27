@@ -14,6 +14,7 @@ public class Migrate {
 
     public static void main(String[] args) throws IOException, SQLException {
         runMigrations();
+
     }
 
     public static void runMigrations() throws IOException, SQLException {
@@ -28,6 +29,7 @@ public class Migrate {
             } else {
                 throw new RuntimeException("Something went wrong, version not increased: " + new_version);
             }
+
         }
     }
 

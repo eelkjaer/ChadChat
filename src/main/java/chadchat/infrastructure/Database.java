@@ -12,7 +12,7 @@ public class Database {
     // static final String PASS = "null";
 
     // Database version
-    private static final int version = 1;
+    private static final int version = 2;
 
     public Database() {
         if (getCurrentVersion() != getVersion()) {

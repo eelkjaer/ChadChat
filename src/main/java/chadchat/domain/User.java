@@ -4,12 +4,13 @@ import java.sql.Timestamp;
 
 public class User {
     private final int id;
-    private final String name;
+    private final String userName;
     private final Timestamp timestamp;
 
-    public User(int id, String name, Timestamp timestamp) {
+
+    public User(int id, String userName, Timestamp timestamp) {
         this.id = id;
-        this.name = name;
+        this.userName = userName;
         this.timestamp = timestamp;
     }
 
@@ -17,19 +18,19 @@ public class User {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
     public Timestamp getTimestamp() {
-        return timestamp;
+         return timestamp;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + userName + '\'' +
                 ", createdAt=" + timestamp +
                 '}';
     }
