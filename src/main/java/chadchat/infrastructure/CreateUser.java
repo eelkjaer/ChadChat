@@ -67,7 +67,6 @@ public class CreateUser {
     }
 
     public static void main(String[] args) {
-
         System.out.println(new CreateUser().createUser("Janus"));
     }
 
