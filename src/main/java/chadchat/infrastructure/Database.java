@@ -1,15 +1,16 @@
 package chadchat.infrastructure;
 
 import java.sql.*;
+import java.util.TimeZone;
 
 public class Database {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/ChadChat";
+    static final String DB_URL = "jdbc:mysql://localhost/ChadChat?serverTimezone=" + TimeZone.getDefault().getID();
 
     // Database credentials
     static final String USER = "chadchat";
-    // static final String PASS = "familiebil";
+    static final String PASS = "familiebil";
 
     // Database version
     private static final int version = 1;
@@ -39,7 +40,7 @@ public class Database {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, null);
+        return DriverManager.getConnection(DB_URL, USER, PASS);
 
     }
 

@@ -3,11 +3,9 @@ package chadchat.infrastructure;
 import chadchat.domain.User;
 
 import java.sql.*;
-import java.util.Calendar;
 import java.util.NoSuchElementException;
 
 import static chadchat.infrastructure.Database.getConnection;
-import static java.sql.Types.TIMESTAMP;
 
 public class CreateUser {
 
@@ -39,7 +37,7 @@ public class CreateUser {
         return findUser(id);
     }
 
-    public User findUser(int id) throws NoSuchElementException {
+    public User findUser(int id) {
         try(Connection conn = getConnection()) {
             PreparedStatement s = conn.prepareStatement(
                     "SELECT * FROM user WHERE id = ?;");
@@ -52,18 +50,24 @@ public class CreateUser {
                 throw new NoSuchElementException("No user with id: " + id);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
+        return null;
     }
 
 
-    private User loadUser(ResultSet rs) throws SQLException {
-        return new User(
-                rs.getInt("user.id"),
-                rs.getString("user.userName"),
-                rs.getTimestamp("user.timestamp").toLocalDateTime());
-        // rs.getBytes("users.salt"),
-        // rs.getBytes("users.secret"));
+    private User loadUser(ResultSet rs) {
+        try {
+            return new User(
+                    rs.getInt("user.id"),
+                    rs.getString("user.userName"),
+                    rs.getTimestamp("user.timestamp").toLocalDateTime());
+            // rs.getBytes("users.salt"),
+            // rs.getBytes("users.secret"));
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     public static void main(String[] args) {

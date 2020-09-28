@@ -15,5 +15,11 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="ChadChat@localhost" uuid="071d3523-83a8-4a1c-a0c9-c67bc70e5d35">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" exact-version="0" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>chadchat</user-name>
+      <schema-mapping />
+    </data-source>
   </component>
 </project>

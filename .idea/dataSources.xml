@@ -7,5 +7,14 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://104.248.135.65:3306/ChadChat</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="ChadChat@localhost" uuid="071d3523-83a8-4a1c-a0c9-c67bc70e5d35">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306/ChadChat</jdbc-url>
+      <driver-properties>
+        <property name="serverTimezone" value="GMT+1" />
+      </driver-properties>
+    </data-source>
   </component>
 </project>
