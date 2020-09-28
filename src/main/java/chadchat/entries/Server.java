@@ -36,7 +36,7 @@ public class Server {
                 User user = new User(
                         rs.getInt("id"),
                         rs.getString("username"),
-                        rs.getTimestamp("createdAt"));
+                        rs.getTimestamp("createdAt").toLocalDateTime());
                 System.out.println(user);
             }
             System.out.println("You're connected to CHADCHAT");

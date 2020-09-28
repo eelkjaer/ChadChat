@@ -6,19 +6,8 @@ import java.sql.*;
 
 public class CreateChannel {
 
-    // The entry point of the ChatChad server
-
-    // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://104.248.135.65/ChadChat";
-
-    //  Database credentials
-    static final String USER = "chadchat";
-    // static final String PASS = "familiebil";
-
-    private static void createChannel(String name) throws ClassNotFoundException {
-        Class.forName(JDBC_DRIVER);
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, null)) {
+    private static void createChannel(String name)  {
+        try (Connection conn = Database.getConnection()) {
             String sql;
             sql = "INSERT INTO Channels(name) VALUES (?)";
 

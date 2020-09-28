@@ -1,14 +1,15 @@
 package chadchat.domain;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class User {
     private final int id;
     private final String userName;
-    private final Timestamp timestamp;
+    private final LocalDateTime timestamp;
 
 
-    public User(int id, String userName, Timestamp timestamp) {
+    public User(int id, String userName, LocalDateTime timestamp) {
         this.id = id;
         this.userName = userName;
         this.timestamp = timestamp;
@@ -22,7 +23,7 @@ public class User {
         return userName;
     }
 
-    public Timestamp getTimestamp() {
+    public LocalDateTime getTimestamp() {
          return timestamp;
     }
 
