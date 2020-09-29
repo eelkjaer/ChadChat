@@ -5,28 +5,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Message {
-    int id;
-    String messageText;
-    Timestamp timestamp;
-    String user;
+    private final int id;
+    private final String messageText;
+    private final LocalDateTime timestamp;
+    // private final User user;
 
-    public Message(int id, String messageText, Timestamp timestamp, String user) {
+    public Message(int id, String messageText, LocalDateTime timestamp) {
         this.id = id;
         this.messageText = messageText;
         this.timestamp = timestamp;
-        this.user = user;
-    }
-
-    public static Message createMessage(String messageText, Timestamp timestamp, String user) {
-        return new Message(-1, messageText, timestamp, user);
-    }
-
-    public Message withId(int id) {
-        return new Message(id, this.messageText, timestamp, user);
-    }
-
-    public void setId(int id){
-        this.id = id;
+        // this.user = user;
     }
 
     public int getId() {
@@ -37,12 +25,24 @@ public class Message {
         return messageText;
     }
 
-    public Timestamp getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public String getUser() {
+/*
+    public User getUser() {
         return user;
     }
 
+ */
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", Message messageText='" + messageText + '\'' +
+                ", timestamp=" + timestamp +
+                // ", user=" + user +
+                '}';
+    }
 }

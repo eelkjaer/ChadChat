@@ -1,41 +1,48 @@
 package chadchat.domain;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Subscription {
 
-    Message message;
     Channel channel;
-    UserRights rights;
-    Timestamp timestamp;
+    Boolean subcribe;
+    // UserRights rights;
+    LocalDateTime timestamp;
 
 
-    public Subscription(Message message, Channel channel, UserRights rights, Timestamp timestamp) {
-        this.message = message;
+    public Subscription(Channel channel, boolean Subscribe, LocalDateTime timestamp) {
+        // this.message = message;
         this.channel = channel;
-        this.rights = rights;
+        // this.rights = rights;
         this.timestamp = timestamp;
     }
 
+    /*
     public static enum UserRights {
         ALL,
         LIMITED
     }
-
-    public Message getMessage() {
-        return message;
-    }
+     */
 
     public Channel getChannel() {
         return channel;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 
-    public UserRights getRights() {
-        return rights;
+    public Boolean getSubcribe() {
+        return subcribe;
+    }
+
+    public void setSubcribe(Boolean subcribe) {
+        this.subcribe = subcribe;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 }
 

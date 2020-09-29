@@ -11,7 +11,9 @@ import static java.sql.Types.TIMESTAMP;
 
 public class CreateUser {
 
-    private User createUser(String userName) {
+    /*
+
+    public User createUser(String userName) {
         int id = -1;
         try (Connection conn = Database.getConnection()) {
             String sql;
@@ -67,7 +69,9 @@ public class CreateUser {
     }
 
     public static void main(String[] args) {
-        System.out.println(new CreateUser().createUser("Janus"));
+        System.out.println(new CreateUser().createUser("Janus2"));
     }
+
+     */
 
 }

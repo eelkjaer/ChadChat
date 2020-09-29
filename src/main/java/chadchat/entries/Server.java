@@ -4,10 +4,25 @@ import chadchat.domain.Channel;
 import chadchat.domain.Message;
 import chadchat.domain.User;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.sql.*;
 
 public class Server {
     // The entry point of the ChatChad server
+
+    private final int port = 6060;
+    private final ServerSocket serverSocket = new ServerSocket(port);
+
+
+    public Server() throws IOException {
+
+
+    }
+}
+
+
+    /*
 
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -24,6 +39,7 @@ public class Server {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
+    /*
 
     private static void dbTest() throws ClassNotFoundException, SQLException {
         Class.forName(JDBC_DRIVER);
@@ -44,9 +60,11 @@ public class Server {
     }
 
 
+
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         // Remove this soon
         dbTest();
 
     }
-}
+
+     */
