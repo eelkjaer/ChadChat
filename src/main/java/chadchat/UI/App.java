@@ -1,13 +1,14 @@
 package chadchat.UI;
 
-import chadchat.domain.Channel;
-import chadchat.domain.Message;
-import chadchat.domain.User;
+import chadchat.domain.Channel.*;
+import chadchat.domain.Message.*;
+import chadchat.domain.User.*;
 import chadchat.entries.Server;
-import chadchat.infrastructure.CreateUser;
 import chadchat.infrastructure.Database;
+import chadchat.UI.Beautifier;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -15,7 +16,7 @@ import java.util.Scanner;
 public class App {
 
     // private final ServerSocket serverSocket = new ServerSocket(port);
-
+    //private final Beautifier ui = new Beautifier();
 
     public static void main(String[] args) throws IOException {
 
@@ -24,10 +25,11 @@ public class App {
 
         while (true) {
             Socket socket = serverSocket.accept();
-            System.out.println("[CONNECTED] " + socket.getInetAddress() + " port " + socket.getLocalPort());
+            new Beautifier().printMessage("[CONNECTED] " + socket.getInetAddress() + " port " + socket.getLocalPort(), true);
+            
 
-            Thread thread = new Thread(new Server(socket));
-            thread.start();
+            //Thread thread = new Thread(new Server(new Scanner(System.in),new PrintWriter(System.out)));
+            //thread.start();
         /*
         System.out.println("Server Started!");
 

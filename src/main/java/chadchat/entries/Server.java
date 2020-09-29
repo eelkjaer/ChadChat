@@ -1,51 +1,43 @@
 package chadchat.entries;
 
+import chadchat.UI.Menu;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Server implements Runnable {
-
-    private final Socket socket;
-
-    public Server(Socket socket) {
+public class Server {
+    
+    protected final Scanner in;
+    protected final PrintWriter out;
+    protected boolean running = true;
+    private Socket socket = null;
+    
+    public Server(Scanner in, PrintWriter out) {
+        this.in = in;
+        this.out = out;
+    }
+    
+    public void setSocket(Socket socket){
         this.socket = socket;
     }
-
-    @Override
-    public void run() {
-
+    
+    public void quit(){
         try {
-            Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-            System.out.println("Started");
-            out.println("Started");
-
-            String line = null;
-            while (!(line = in.nextLine()).strip().equals("quit")) {
-                out.println("You said: " + line);
-                out.flush();
-            }
-
             socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e){
+            System.out.println(e.getMessage());
         }
-
     }
-
-    public static void main(String[] args) throws IOException {
-        final int port = 6860;
-        final ServerSocket serverSocket = new ServerSocket(port);
-
-        while (true) {
-            Socket socket = serverSocket.accept();
-            System.out.println("[CONNECTED] " + socket.getInetAddress() + " port " + socket.getLocalPort());
-
-            Thread thread = new Thread(new Server(socket));
-            thread.start();
+    
+    public void run() {
+            while (running) {
+                Menu menu = new Menu(in, out);
+                
+                menu.showMenu();
+                out.flush();
+            
         }
     }
 }
