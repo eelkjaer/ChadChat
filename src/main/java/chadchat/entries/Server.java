@@ -1,23 +1,52 @@
 package chadchat.entries;
 
-import chadchat.domain.Channel;
-import chadchat.domain.Message;
-import chadchat.domain.User;
-
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.sql.*;
+import java.net.Socket;
+import java.util.Scanner;
 
-public class Server {
-    // The entry point of the ChatChad server
+public class Server implements Runnable {
 
-    private final int port = 6060;
-    private final ServerSocket serverSocket = new ServerSocket(port);
+    private final Socket socket;
 
+    public Server(Socket socket) {
+        this.socket = socket;
+    }
 
-    public Server() throws IOException {
+    @Override
+    public void run() {
 
+        try {
+            Scanner in = new Scanner(socket.getInputStream());
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            System.out.println("Started");
+            out.println("Started");
 
+            String line = null;
+            while (!(line = in.nextLine()).strip().equals("quit")) {
+                out.println("You said: " + line);
+                out.flush();
+            }
+
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void main(String[] args) throws IOException {
+        final int port = 6860;
+        final ServerSocket serverSocket = new ServerSocket(port);
+
+        while (true) {
+            Socket socket = serverSocket.accept();
+            System.out.println("[CONNECTED] " + socket.getInetAddress() + " port " + socket.getLocalPort());
+
+            Thread thread = new Thread(new Server(socket));
+            thread.start();
+        }
     }
 }
 

@@ -9,6 +9,7 @@ import chadchat.infrastructure.Database;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Scanner;
 
 public class App {
@@ -18,6 +19,16 @@ public class App {
 
     public static void main(String[] args) throws IOException {
 
+        final int port = 6060;
+        final ServerSocket serverSocket = new ServerSocket(port);
+
+        while (true) {
+            Socket socket = serverSocket.accept();
+            System.out.println("[CONNECTED] " + socket.getInetAddress() + " port " + socket.getLocalPort());
+
+            Thread thread = new Thread(new Server(socket));
+            thread.start();
+        /*
         System.out.println("Server Started!");
 
         Scanner sc = new Scanner(System.in);
@@ -35,5 +46,8 @@ public class App {
         Message message = database.createMessage(messageText);
         System.out.println("You're now connected \n" + user +  "\nChannel " + channel + "\nMess: " + message);
     }
-}
 
+         */
+        }
+    }
+}
