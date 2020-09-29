@@ -1,6 +1,7 @@
-package chadchat.domain;
+package chadchat.domain.Subscription;
 
-import java.sql.Timestamp;
+import chadchat.domain.Channel.Channel;
+
 import java.time.LocalDateTime;
 
 public class Subscription {

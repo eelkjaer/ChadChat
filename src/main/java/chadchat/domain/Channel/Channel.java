@@ -1,4 +1,4 @@
-package chadchat.domain;
+package chadchat.domain.Channel;
 
 import java.time.LocalDateTime;
 

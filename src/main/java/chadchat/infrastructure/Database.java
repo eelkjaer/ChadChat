@@ -1,20 +1,24 @@
 package chadchat.infrastructure;
 
-import chadchat.domain.Channel;
-import chadchat.domain.Message;
-import chadchat.domain.User;
+import chadchat.domain.Channel.Channel;
+import chadchat.domain.Message.Message;
+import chadchat.domain.Message.MessageExists;
+import chadchat.domain.Message.MessageRepository;
+import chadchat.domain.User.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import java.util.TimeZone;
 
-public class Database {
+public class Database implements MessageRepository {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/ChadChat";
+    static final String DB_URL = "jdbc:mysql://localhost/ChadChat?serverTimezone=" + TimeZone.getDefault().getID();
 
     // Database credentials
     static final String USER = "chadchat";
-    // static final String PASS = "familiebil";
+    static final String PASS = "familiebil";
 
     // Database version
     private static final int version = 1;
@@ -44,7 +48,7 @@ public class Database {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, null);
+        return DriverManager.getConnection(DB_URL, USER, PASS);
 
     }
 
@@ -162,28 +166,6 @@ public class Database {
         // rs.getBytes("users.secret"));
     }
 
-
-    public Message createMessage(String messageText) {
-        int id = -1;
-        try (Connection conn = Database.getConnection()) {
-            String sql;
-            sql = "INSERT INTO Messages(messageText) VALUES (?)";
-
-            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, messageText);
-            stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                id = rs.getInt(1);
-            } else {
-                System.out.println("elsa");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return findMessage(id);
-    }
-
     public Message findMessage(int id) throws NoSuchElementException {
         try(Connection conn = getConnection()) {
             PreparedStatement s = conn.prepareStatement(
@@ -209,10 +191,48 @@ public class Database {
         // rs.getBytes("users.salt"),
         // rs.getBytes("users.secret"));
     }
-
-
-
-
-
-
+    
+    
+    @Override
+    public Iterable<Message> findAllMessages() {
+        try (Connection conn = getConnection()) {
+            PreparedStatement s = conn.prepareStatement("SELECT * FROM Messages;");
+            ResultSet rs = s.executeQuery();
+            ArrayList<Message> items = new ArrayList<>();
+            while(rs.next()) {
+                items.add(loadMessage(rs));
+            }
+            return items;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @Override
+    public Message createMessage(String messageText) {
+        int id;
+        try (Connection conn = getConnection()) {
+            var ps =
+                    conn.prepareStatement(
+                            "INSERT INTO Messages (messageText) " +
+                                    "VALUE (?);",
+                            Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, messageText);
+            try {
+                ps.executeUpdate();
+            } catch (SQLIntegrityConstraintViolationException e) {
+                throw new MessageExists();
+            }
+        
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getInt(1);
+            } else {
+                throw new MessageExists(rs.getInt(1));
+            }
+        } catch (SQLException | MessageExists e) {
+            throw new RuntimeException(e);
+        }
+        return findMessage(id);
+    }
 }

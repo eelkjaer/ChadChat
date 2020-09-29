@@ -1,4 +1,4 @@
-package chadchat.domain;
+package chadchat.domain.User;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

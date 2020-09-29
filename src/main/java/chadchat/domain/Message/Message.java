@@ -1,4 +1,4 @@
-package chadchat.domain;
+package chadchat.domain.Message;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -16,6 +16,12 @@ public class Message {
         this.timestamp = timestamp;
         // this.user = user;
     }
+    
+    public Message(String messageText){
+        this.id = -1;
+        this.messageText = messageText;
+        this.timestamp = null;
+    }
 
     public int getId() {
         return id;
@@ -28,6 +34,8 @@ public class Message {
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
+    
+    
 
 /*
     public User getUser() {
