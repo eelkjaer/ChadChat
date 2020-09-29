@@ -1,14 +1,11 @@
 package chadchat.UI;
 
-import chadchat.domain.Channel;
-import chadchat.domain.Message;
-import chadchat.domain.User;
-import chadchat.entries.Server;
-import chadchat.infrastructure.CreateUser;
+import chadchat.domain.Channel.Channel;
+import chadchat.domain.Message.Message;
+import chadchat.domain.User.User;
 import chadchat.infrastructure.Database;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.Scanner;
 
 public class App {

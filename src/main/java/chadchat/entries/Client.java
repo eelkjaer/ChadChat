@@ -1,6 +1,6 @@
 package chadchat.entries;
 
-import chadchat.domain.User;
+import chadchat.domain.User.User;
 
 import java.io.PrintWriter;
 import java.net.Socket;

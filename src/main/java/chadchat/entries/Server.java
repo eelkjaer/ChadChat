@@ -1,12 +1,7 @@
 package chadchat.entries;
 
-import chadchat.domain.Channel;
-import chadchat.domain.Message;
-import chadchat.domain.User;
-
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.sql.*;
 
 public class Server {
     // The entry point of the ChatChad server
