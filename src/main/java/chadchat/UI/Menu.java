@@ -1,6 +1,10 @@
 package chadchat.UI;
 
+import chadchat.api.ChadChat;
+import chadchat.domain.Message.Message;
+import chadchat.domain.User.User;
 import chadchat.entries.Server;
+import chadchat.infrastructure.Database;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -8,9 +12,13 @@ import java.util.Scanner;
 public class Menu extends Server {
     
     private final Beautifier beauty = new Beautifier();
+    private final Database db = new Database();
+    private User curUser;
+    private final ChadChat chadChat;
     
-    public Menu(Scanner in, PrintWriter out) {
+    public Menu(Scanner in, PrintWriter out, ChadChat chadChat) {
         super(in, out);
+        this.chadChat = chadChat;
     }
     
     public void showMenu() {
@@ -31,7 +39,7 @@ public class Menu extends Server {
                 case 1:
                     out.println(menuItems[input-1] + " Selected");
                     out.flush();
-                    //TODO: User login
+                    loginCheck();
                     break;
                 case 2:
                     out.println(menuItems[input-1] + " Selected");
@@ -50,14 +58,74 @@ public class Menu extends Server {
 
         }
     }
+    
+    public void loadChat(){
+        for (Message tmpMsg : db.findAllMessages()) {
+            out.println(tmpMsg.getTimestamp().toLocalTime().toString() +
+                    " " + tmpMsg.getUser().getUserName() +
+                    " said: " + tmpMsg.getMessageText());
+            out.flush();
+        }
+    }
+    
+    public void showChat(){
+        loadChat();
+        boolean chatting = true;
+        out.flush();
+        while(chatting) {
+            try {
+                out.print("> ");
+                out.flush();
+                
+                String msg = in.nextLine();
+                if(msg.strip().equalsIgnoreCase("quit")){
+                    out.flush();
+                    chatting = false;
+                    continue;
+                }
+                
+                chadChat.createMessage(curUser,msg);
+        
+            } catch (Exception e) {
+                out.println(e.getMessage());
+                out.flush();
+        
+            }
+        }
+    }
 
     private void createUser() {
         out.print("Enter your name: ");
         out.flush();
         String userName = in.nextLine();
 
-        out.println("Welcome, " + userName);
+        out.println("Welcome to ChadChat, " + userName);
+        
+        showChat();
 
+    }
+    
+    private void loginCheck(){
+        String userName;
+        out.print("Enter your username: ");
+        out.flush();
+        userName = in.nextLine();
+        
+        curUser = db.checkLogin(userName);
+    
+        while(true) {
+            if (! (curUser == null)) {
+                out.println("Welcome to ChadChat, " + userName);
+                System.out.println("Connected: " + curUser);
+                break;
+            } else {
+                out.print("Wrong username. Try again!\nUsername: ");
+                out.flush();
+                userName = in.nextLine();
+                curUser = db.checkLogin(userName);
+            }
+        }
+        showChat();
     }
 }
 

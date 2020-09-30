@@ -55,6 +55,25 @@ public class Database implements MessageRepository {
     public static int getVersion() {
         return version;
     }
+    
+    public User checkLogin(String username){
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            var stmt = conn.createStatement();
+            String sql;
+            sql = "SELECT * FROM User WHERE userName='"+username+"'";
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("id"),
+                        rs.getString("userName"),
+                        rs.getTimestamp("timestamp").toLocalDateTime());
+            }
+            System.out.println("You're connected to CHADCHAT");
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 
     public User createUser(String userName) {
         int id = -1;
@@ -187,7 +206,8 @@ public class Database implements MessageRepository {
         return new Message(
                 rs.getInt("messages.id"),
                 rs.getString("messages.messageText"),
-                rs.getTimestamp("messages.timestamp").toLocalDateTime());
+                rs.getTimestamp("messages.timestamp").toLocalDateTime(),
+                findUser(rs.getInt("messages.userid")));
         // rs.getBytes("users.salt"),
         // rs.getBytes("users.secret"));
     }
@@ -209,15 +229,16 @@ public class Database implements MessageRepository {
     }
     
     @Override
-    public Message createMessage(String messageText) {
+    public Message createMessage(String messageText, User user) {
         int id;
         try (Connection conn = getConnection()) {
             var ps =
                     conn.prepareStatement(
-                            "INSERT INTO Messages (messageText) " +
-                                    "VALUE (?);",
+                            "INSERT INTO Messages (messageText, userid) " +
+                                    "VALUE (?,?);",
                             Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, messageText);
+            ps.setInt(2,user.getId());
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
