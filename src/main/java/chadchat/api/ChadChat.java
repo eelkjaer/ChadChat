@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class ChadChat {
     private final Set<MessageObserver> messageObservers = new HashSet<>();
+    private final Set<User> activeUsers = new HashSet<>();
     private final Database db = new Database();
     
     public User userLogin(String username){
