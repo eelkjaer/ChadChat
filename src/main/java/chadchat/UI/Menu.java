@@ -83,6 +83,9 @@ public class Menu extends Server {
                     chatting = false;
                     continue;
                 }
+                if (msg.strip().equalsIgnoreCase("!users")){
+                    chadChat.getActiveUsers();
+                }
 
                 chadChat.createMessage(curUser, msg);
 

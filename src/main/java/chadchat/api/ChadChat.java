@@ -5,6 +5,7 @@ import chadchat.domain.User.User;
 import chadchat.infrastructure.Database;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ChadChat {
@@ -14,11 +15,13 @@ public class ChadChat {
 
     public User userLogin(String username) {
         User user = db.checkLogin(username);
-        activeUsers.add(user);
+        synchronized (this) {
+            activeUsers.add(user);
+        }
         return user;
     }
 
-    public void logout(User user) {
+    public synchronized void logout(User user) {
         activeUsers.remove(user);
     }
 
@@ -38,6 +41,10 @@ public class ChadChat {
 
     public synchronized void registerMessageObserver(MessageObserver observer) {
         messageObservers.add(observer);
+    }
+
+    public synchronized Iterable<User> getActiveUsers() {
+        return List.copyOf(activeUsers);
     }
 
 
