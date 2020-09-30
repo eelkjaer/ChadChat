@@ -60,7 +60,7 @@ public class Menu extends Server {
     }
     
     public void loadChat(){
-        for (Message tmpMsg : db.findAllMessages()) {
+        for (Message tmpMsg : db.findAllMessages(1)) {
             out.println(tmpMsg.getTimestamp().toLocalTime().toString() +
                     " " + tmpMsg.getUser().getUserName() +
                     " said: " + tmpMsg.getMessageText());

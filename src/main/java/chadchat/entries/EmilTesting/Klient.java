@@ -19,6 +19,8 @@ public class Klient implements Runnable, ChadChat.MessageObserver {
     private final ChadChat chadChat;
     private final Socket socket;
     
+    private int lastSeenMsg;
+    
     public Klient(Scanner in, PrintWriter out, ChadChat chadChat, Socket socket) {
         this.in = in;
         this.out = out;
@@ -32,9 +34,10 @@ public class Klient implements Runnable, ChadChat.MessageObserver {
     
     @Override
     public void notifyNewMessages() {
-        for (Message m : chadChat.getNewMessages()) {
+        for (Message m : chadChat.getNewMessages(lastSeenMsg)) {
             out.println(m);
             out.flush();
+            lastSeenMsg = m.getId();
         }
     }
     
@@ -51,8 +54,6 @@ public class Klient implements Runnable, ChadChat.MessageObserver {
                 out.flush();
         
             }
-            
-            //socket.close();
             
         } catch (IOException e){
             e.printStackTrace();

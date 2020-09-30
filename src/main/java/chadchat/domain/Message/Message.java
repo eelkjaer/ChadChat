@@ -19,7 +19,7 @@ public class Message {
         this.user = user;
     }
     
-    public Message(String messageText, User user){
+    public Message(String messageText){
         this.user = null;
         this.id = -1;
         this.messageText = messageText;

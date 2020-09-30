@@ -4,9 +4,7 @@ import chadchat.domain.Message.Message;
 import chadchat.domain.User.User;
 import chadchat.infrastructure.Database;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ChadChat {
@@ -18,18 +16,17 @@ public class ChadChat {
     }
     
     public void createMessage(User user, String msg) {
-        // Create message correctly.
+        db.createMessage(msg,user);
         synchronized (this) {
-            db.createMessage(msg,user);
             for (MessageObserver messageObserver : messageObservers) {
                 messageObserver.notifyNewMessages();
             }
         }
     }
     
-    public Iterable<Message> getNewMessages() {
+    public Iterable<Message> getNewMessages(int lastSeenMsg) {
         // Database get messages
-        return db.findAllMessages();
+        return db.findAllMessages(lastSeenMsg);
     }
     
     public synchronized void registerMessageObserver(MessageObserver observer) {

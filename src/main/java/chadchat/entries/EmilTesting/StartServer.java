@@ -14,7 +14,7 @@ public class StartServer implements Runnable{
     
     public static volatile boolean keepRunning = true;
     private final Socket socket;
-    private ChadChat chadChat;
+    private final ChadChat chadChat;
     
     public StartServer(Socket socket, ChadChat chadChat) {
         this.socket = socket;
@@ -26,8 +26,9 @@ public class StartServer implements Runnable{
     }
     
     public static void main(String[] args) throws IOException {
-        final int port = 6969;
+        final int port = 6999;
         final ServerSocket serverSocket = new ServerSocket(port);
+        final ChadChat chadChat = new ChadChat();
         String timestamp = new SimpleDateFormat("HH:MM:ss").format(new Date());
         
         while(keepRunning) {
@@ -36,7 +37,7 @@ public class StartServer implements Runnable{
                     + " port " + socket.getPort()
                     + " server port " + socket.getLocalPort());
             
-            Thread thread = new Thread(new StartServer(socket, new ChadChat()));
+            Thread thread = new Thread(new StartServer(socket, chadChat));
             thread.start();
         }
     }

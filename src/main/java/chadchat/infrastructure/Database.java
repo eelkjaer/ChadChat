@@ -212,11 +212,11 @@ public class Database implements MessageRepository {
         // rs.getBytes("users.secret"));
     }
     
-    
     @Override
-    public Iterable<Message> findAllMessages() {
+    public Iterable<Message> findAllMessages(int lastSeenMsg) {
         try (Connection conn = getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM Messages;");
+            PreparedStatement s = conn.prepareStatement("SELECT * FROM Messages WHERE id>?;");
+            s.setInt(1,lastSeenMsg);
             ResultSet rs = s.executeQuery();
             ArrayList<Message> items = new ArrayList<>();
             while(rs.next()) {
