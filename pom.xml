@@ -77,7 +77,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>
-                                chadchat.entries.EmilTesting.StartServer
+                                chadchat.entries.Server
                             </mainClass>
                         </manifest>
                     </archive>

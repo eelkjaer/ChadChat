@@ -2,6 +2,8 @@ package chadchat.UI;
 
 import chadchat.domain.User.User;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 //@author Emil Elkjær Nielsen (cph-en93@cphbusiness.dk)
@@ -36,6 +38,17 @@ public class Beautifier{
         }
         str += "##########################\n"; //End of Menu divider
 
+        return str;
+    }
+    
+    public String generateCmdMenuStr(HashMap<String,String> menuItems){
+        String str = "";
+        str += "##########################\n"; //Start of Menu divider
+        for(Map.Entry<String, String> menu: menuItems.entrySet()){
+            str += "\"!" + menu.getKey() + "\" \t" + menu.getValue() + " \n";
+        }
+        str += "##########################\n"; //End of Menu divider
+        
         return str;
     }
 

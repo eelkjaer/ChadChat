@@ -3,22 +3,34 @@ package chadchat.UI;
 import chadchat.api.ChadChat;
 import chadchat.domain.Message.Message;
 import chadchat.domain.User.User;
-import chadchat.entries.Server;
+import chadchat.entries.Client;
 import chadchat.infrastructure.Database;
 
 import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.HashMap;
 import java.util.Scanner;
 
-public class Menu extends Server {
+
+public class Menu {
 
     private final Beautifier beauty = new Beautifier();
     private final Database db = new Database();
     private User curUser;
     private final ChadChat chadChat;
+    private final Scanner in;
+    private final PrintWriter out;
+    private final Socket socket;
 
-    public Menu(Scanner in, PrintWriter out, ChadChat chadChat) {
-        super(in, out);
+    public Menu(Scanner in, PrintWriter out, ChadChat chadChat, Socket socket) {
         this.chadChat = chadChat;
+        this.in = in;
+        this.out = out;
+        this.socket = socket;
+    }
+    
+    public User getCurUser(){
+        return curUser;
     }
 
     public void showMenu() {
@@ -32,10 +44,9 @@ public class Menu extends Server {
             int input = Integer.parseInt(in.nextLine());
             switch (input) {
                 case 0:
-                    super.running = false;
                     out.println("Goodbye! \uD83D\uDE00");
                     out.flush();
-                    super.quit();
+                    chadChat.logout(curUser);
                 case 1:
                     out.println(menuItems[input - 1] + " Selected");
                     out.flush();
@@ -67,6 +78,15 @@ public class Menu extends Server {
             out.flush();
         }
     }
+    
+    private HashMap<String, String> helpMenu(){
+        HashMap<String, String> menuItems = new HashMap<>();
+        menuItems.put("help","Shows all available commands");
+        menuItems.put("quit","Will log you out.");
+        menuItems.put("users","Lists all active users");
+        
+        return menuItems;
+    }
 
     public void showChat() {
         loadChat();
@@ -78,16 +98,26 @@ public class Menu extends Server {
                 out.flush();
 
                 String msg = in.nextLine();
-                if (msg.strip().equalsIgnoreCase("quit")) {
-                    out.flush();
-                    chatting = false;
-                    continue;
+                
+                switch (msg){
+                    case "!help":
+                        out.print(beauty.generateCmdMenuStr(helpMenu()));
+                        break;
+                    case "!quit":
+                        out.flush();
+                        chatting = false;
+                        continue;
+                    case "!users":
+                        out.println("\nActive users:");
+                        for(User u: chadChat.getActiveUsers()){
+                            out.println(u.getUserName());
+                            out.flush();
+                        }
+                        break;
+                    default:
+                        chadChat.createMessage(curUser, msg);
+                        break;
                 }
-                if (msg.strip().equalsIgnoreCase("!users")){
-                    chadChat.getActiveUsers();
-                }
-
-                chadChat.createMessage(curUser, msg);
 
             } catch (Exception e) {
                 out.println(e.getMessage());

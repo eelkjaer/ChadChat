@@ -12,6 +12,7 @@ public class ChadChat {
     private final Set<MessageObserver> messageObservers = new HashSet<>();
     private final Set<User> activeUsers = new HashSet<>();
     private final Database db = new Database();
+    private Set<User> blocked;
 
     public User userLogin(String username) {
         User user = db.checkLogin(username);
@@ -24,6 +25,23 @@ public class ChadChat {
     public synchronized void logout(User user) {
         activeUsers.remove(user);
     }
+    
+    public synchronized void setBlocked(User user) {
+        blocked.add(user);
+    }
+    
+    public synchronized void removeBlocked(User user) {
+        blocked.remove(user);
+    }
+    
+    public synchronized boolean isUserBlocked(User user) {
+        return blocked.contains(user);
+    }
+    
+    public Iterable<User> getBlockedUsers() {
+        return blocked;
+    }
+    
 
     public void createMessage(User user, String msg) {
         db.createMessage(msg, user);
@@ -50,6 +68,7 @@ public class ChadChat {
 
     public interface MessageObserver {
         void notifyNewMessages();
+        void notifyUserBlocked();
     }
 
 }
