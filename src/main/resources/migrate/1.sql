@@ -6,7 +6,7 @@ CREATE TABLE Channels (
     PRIMARY KEY (id)
 );
 
-INSERT INTO Channels (channelName) VALUES ("Janu");
+INSERT INTO Channels (channelName) VALUES ("Janus");
 
 DROP TABLE IF EXISTS User;
 CREATE TABLE User (
@@ -28,18 +28,6 @@ CREATE TABLE Messages (
 
 INSERT INTO messages (messageText) VALUES ("Test chat-text");
 
-DROP TABLE IF EXISTS Subcriptions;
-CREATE TABLE Subcriptions (
-    id int AUTO_INCREMENT,
-    channelName VARCHAR(255) NOT NULL,
-    subscribe boolean,
-    timestamp TIMESTAMP NOT NULL default(NOW()),
-    PRIMARY KEY (subscribe)
-    FOREIGN KEY (id) REFERENCES User(id)
-    FOREIGN KEY (channelName) REFERENCES Channels(channelName)
-);
-
-INSERT INTO messages (messageText) VALUES ("Test chat-text");
 
 UPDATE properties
 SET value = '1'

@@ -18,7 +18,7 @@ public class Database implements MessageRepository {
 
     // Database credentials
     static final String USER = "chadchat";
-    static final String PASS = "familiebil";
+    //static final String PASS = "familiebil";
 
     // Database version
     private static final int version = 1;
@@ -48,7 +48,7 @@ public class Database implements MessageRepository {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASS);
+        return DriverManager.getConnection(DB_URL, USER, null);
 
     }
 
@@ -57,7 +57,7 @@ public class Database implements MessageRepository {
     }
     
     public User checkLogin(String username){
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, null)) {
             var stmt = conn.createStatement();
             String sql;
             sql = "SELECT * FROM User WHERE userName='"+username+"'";
