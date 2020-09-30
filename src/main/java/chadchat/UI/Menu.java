@@ -8,7 +8,9 @@ import chadchat.infrastructure.Database;
 
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -21,6 +23,15 @@ public class Menu {
     private final Scanner in;
     private final PrintWriter out;
     private final Socket socket;
+    
+    private final List<String> illegalUsernames = new ArrayList<>() {
+        {
+            add("system");
+            add("sys");
+            add("admin");
+            add("administrator");
+        }
+    };
 
     public Menu(Scanner in, PrintWriter out, ChadChat chadChat, Socket socket) {
         this.chadChat = chadChat;
@@ -115,9 +126,17 @@ public class Menu {
                         }
                         break;
                     case "!kick":
-                        String username = msg.substring(5).trim();
+                        if(!curUser.isAdmin()) {
+                            out.println("Action not allowed!");
+                            break;
+                        }
+                        out.print("Enter username: ");
+                        out.flush();
+                        String username = in.nextLine();
                         User user = chadChat.findActiveUser(username);
-                        chadChat.setBlocked(user);
+                        chadChat.setBlocked(user, curUser);
+                        chadChat.removeBlocked(user);
+                        
                         break;
                     default:
                         chadChat.createMessage(curUser, msg);
@@ -148,6 +167,13 @@ public class Menu {
         out.print("Enter your username: ");
         out.flush();
         userName = in.nextLine();
+        
+        if(illegalUsernames.contains(userName)){
+            out.print("Illegal username. Try again!\nUsername: ");
+            out.flush();
+            userName = in.nextLine();
+            curUser = db.checkLogin(userName);
+        }
 
         curUser = chadChat.userLogin(userName);
 

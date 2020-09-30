@@ -44,9 +44,14 @@ public class Message {
     
     @Override
     public String toString() {
-        return String.format("%s %s said: %s",
+        String said = "said";
+        if(user.getUserName().equalsIgnoreCase("system")) {
+            said = "";
+        }
+        return String.format("%s %s %s: %s",
                 timestamp.toLocalTime().toString(),
                 user.getUserName(),
+                said,
                 messageText
                 );
     }

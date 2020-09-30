@@ -12,7 +12,7 @@ public class ChadChat {
     private final Set<MessageObserver> messageObservers = new HashSet<>();
     private final Set<User> activeUsers = new HashSet<>();
     private final Database db = new Database();
-    private Set<User> blocked;
+    private final Set<User> blocked = new HashSet<>();
 
     public User userLogin(String username) {
         User user = db.checkLogin(username);
@@ -26,8 +26,16 @@ public class ChadChat {
         activeUsers.remove(user);
     }
     
-    public synchronized void setBlocked(User user) {
+    public synchronized void setBlocked(User user, User admin) {
         blocked.add(user);
+        for (var ob: messageObservers) {
+            ob.notifyUserBlocked();
+        }
+        String blockedMsg = String.format("%s was kicked by %s",
+                user.getUserName(),
+                admin.getUserName());
+        
+        createMessage(new User(1,"SYSTEM",null, true),blockedMsg);
     }
     
     public synchronized void removeBlocked(User user) {
@@ -62,7 +70,6 @@ public class ChadChat {
     }
 
     public Iterable<Message> getNewMessages(int lastSeenMsg) {
-        // Database get messages
         return db.findAllMessages(lastSeenMsg);
     }
 

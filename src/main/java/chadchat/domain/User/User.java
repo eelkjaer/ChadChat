@@ -8,18 +8,24 @@ public class User {
     private final int id;
     private final String userName;
     private final LocalDateTime timestamp;
+    private final boolean admin;
 
 
-    public User(int id, String userName, LocalDateTime timestamp) {
+    public User(int id, String userName, LocalDateTime timestamp, boolean admin) {
         this.id = id;
         this.userName = userName;
         this.timestamp = timestamp;
+        this.admin = admin;
     }
 
     public int getId() {
         return id;
     }
-
+    
+    public boolean isAdmin() {
+        return admin;
+    }
+    
     public String getUserName() {
         return userName;
     }
@@ -40,13 +46,14 @@ public class User {
     public int hashCode() {
         return Objects.hash(id);
     }
-
+    
     @Override
     public String toString() {
-        return "{" +
+        return "User{" +
                 "id=" + id +
-                ", User name='" + userName + '\'' +
-                ", createdAt=" + timestamp +
+                ", userName='" + userName + '\'' +
+                ", timestamp=" + timestamp +
+                ", admin=" + admin +
                 '}';
     }
 }
