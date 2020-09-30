@@ -33,7 +33,7 @@ public class Server {
     
     public void run() {
             while (running) {
-                Menu menu = new Menu(in, out);
+                Menu menu = new Menu(in, out, null);
                 
                 menu.showMenu();
                 out.flush();

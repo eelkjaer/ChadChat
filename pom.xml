@@ -77,12 +77,39 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>
-                                chadchat.entries.Server
+                                chadchat.entries.EmilTesting.StartServer
                             </mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>wagon-maven-plugin</artifactId>
+                    <version>1.0</version>
+                    <executions>
+                        <execution>
+                            <id>scp-to-server</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>upload-single</goal>
+                            </goals>
+                            <configuration>
+                                <serverId>test.server.ssh</serverId>
+                                <fromFile>${project.build.directory}/${project.build.finalName}-resources.zip</fromFile>
+                                <url>scp://chadchat@104.248.135.65/opt/chadchat</url>
+                                <toFile>chadchat.jar</toFile>
+                            </configuration>
+                        </execution>
+                    </executions>
+            </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.12</version>
+            </extension>
+        </extensions>
     </build>
 </project>
