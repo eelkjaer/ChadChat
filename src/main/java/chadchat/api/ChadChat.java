@@ -42,6 +42,15 @@ public class ChadChat {
         return blocked;
     }
     
+    public User findActiveUser(String username){
+        for(User u: activeUsers){
+            if(u.getUserName().equalsIgnoreCase(username)){
+                return u;
+            }
+        }
+        return null;
+    }
+    
 
     public void createMessage(User user, String msg) {
         db.createMessage(msg, user);

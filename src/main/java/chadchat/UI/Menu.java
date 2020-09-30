@@ -114,6 +114,11 @@ public class Menu {
                             out.flush();
                         }
                         break;
+                    case "!kick":
+                        String username = msg.substring(5).trim();
+                        User user = chadChat.findActiveUser(username);
+                        chadChat.setBlocked(user);
+                        break;
                     default:
                         chadChat.createMessage(curUser, msg);
                         break;
