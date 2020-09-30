@@ -13,8 +13,11 @@ public class ChadChat {
     private final Set<MessageObserver> messageObservers = new HashSet<>();
     private final Database db = new Database();
     
+    public User userLogin(String username){
+        return db.checkLogin(username);
+    }
+    
     public void createMessage(User user, String msg) {
-        
         // Create message correctly.
         synchronized (this) {
             db.createMessage(msg,user);

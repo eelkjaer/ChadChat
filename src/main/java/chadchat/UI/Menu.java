@@ -111,7 +111,7 @@ public class Menu extends Server {
         out.flush();
         userName = in.nextLine();
         
-        curUser = db.checkLogin(userName);
+        curUser = chadChat.userLogin(userName);
     
         while(true) {
             if (! (curUser == null)) {
