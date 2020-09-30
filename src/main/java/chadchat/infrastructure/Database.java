@@ -67,7 +67,9 @@ public class Database implements MessageRepository {
                         rs.getInt("id"),
                         rs.getString("userName"),
                         rs.getTimestamp("timestamp").toLocalDateTime(),
-                        rs.getBoolean("admin"));
+                        rs.getBoolean("admin"),
+                        rs.getBytes("users.salt"),
+                        rs.getBytes("users.secret"));
             }
             System.out.println("You're connected to CHADCHAT");
         } catch (SQLException e){
@@ -127,9 +129,9 @@ public class Database implements MessageRepository {
                 rs.getInt("user.id"),
                 rs.getString("user.userName"),
                 rs.getTimestamp("user.timestamp").toLocalDateTime(),
-                rs.getBoolean("user.admin"));
-        // rs.getBytes("users.salt"),
-        // rs.getBytes("users.secret"));
+                rs.getBoolean("user.admin"),
+        rs.getBytes("users.salt"),
+        rs.getBytes("users.secret"));
     }
 
 

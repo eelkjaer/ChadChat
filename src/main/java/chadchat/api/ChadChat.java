@@ -35,7 +35,10 @@ public class ChadChat {
                 user.getUserName(),
                 admin.getUserName());
         
-        createMessage(new User(1,"SYSTEM",null, true),blockedMsg);
+        createMessage(new User(1,
+                "SYSTEM",
+                null,
+                true, null, null ),blockedMsg);
     }
     
     public synchronized void removeBlocked(User user) {

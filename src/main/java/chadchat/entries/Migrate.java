@@ -1,23 +1,10 @@
 package chadchat.entries;
 
-<<<<<<< HEAD
-import chadchat.infrastructure.Database;
-import org.apache.ibatis.jdbc.ScriptRunner;
-
-=======
->>>>>>> Skeleton
-import java.io.*;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-<<<<<<< HEAD
 /**
  *
  */
 public class Migrate {
 
-=======
-public class Migrate {
 
     /*
 >>>>>>> Skeleton
@@ -60,10 +47,5 @@ public class Migrate {
         System.out.println("Done running migration");
     }
 
-<<<<<<< HEAD
-=======
      */
-
-
->>>>>>> Skeleton
 }
