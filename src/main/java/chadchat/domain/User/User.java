@@ -32,7 +32,6 @@ public class User {
     private final LocalDateTime timestamp;
     private final boolean admin;
 
-
     private final byte[] salt;
     private final byte[] secret;
 
@@ -43,7 +42,6 @@ public class User {
         this.userName = userName;
         this.timestamp = timestamp;
         this.admin = admin;
-
         this.salt = salt;
         this.secret = secret;
     }
@@ -67,12 +65,10 @@ public class User {
         }
     }
 
-    public boolean isPasswordCorrect(String password) {
+    public boolean checkPassword(String password) {
         return Arrays.equals(this.secret, calculateSecret(salt, password));
     }
-
-
-
+    
 
     public int getId() {
         return id;
@@ -84,10 +80,6 @@ public class User {
     
     public String getUserName() {
         return userName;
-    }
-
-    public LocalDateTime getTimestamp() {
-         return timestamp;
     }
 
     @Override
