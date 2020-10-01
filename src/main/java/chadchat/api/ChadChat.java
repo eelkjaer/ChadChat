@@ -31,7 +31,7 @@ public class ChadChat {
     }
     
 
-    public User createUserAndLogin(String userName, String password) {
+    public User createUser(String userName, String password) {
         byte[] salt = User.generateSalt();
         User user = db.createUser(userName, salt, User.calculateSecret(salt, password));
         try {
@@ -39,6 +39,17 @@ public class ChadChat {
         } catch (InvalidPassword invalidPassword) {
             throw new RuntimeException(invalidPassword);
         }
+    }
+    
+    public void notifyNewUser(User user){
+        String msg = String.format("%s just joined ChadChat®. Say hi!",
+                user.getUserName());
+    
+        createMessage(new User(1,
+                "SYSTEM",
+                null,
+                true, null, null ),
+                msg);
     }
 
    

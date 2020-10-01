@@ -205,12 +205,13 @@ public class Menu {
         out.flush();
         password = in.nextLine();
     
-        curUser = chadChat.createUserAndLogin(userName, password);
+        curUser = chadChat.createUser(userName, password);
 
         out.println("Welcome to ChadChat, " + userName);
         out.flush();
     
         try {
+            chadChat.notifyNewUser(curUser);
             showChat(); //Loads the chat.
         } finally {
             logout();
