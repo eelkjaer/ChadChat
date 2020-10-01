@@ -9,10 +9,7 @@ import chadchat.infrastructure.Database;
 
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Menu {
@@ -183,23 +180,47 @@ public class Menu {
     }
 
     private void createUser() {
-        out.print("Enter your name: ");
+        String userName = "";
+        String password = "";
+        int maxAttemps = 5;
+        out.print("Enter username: ");
         out.flush();
-        String userName = in.nextLine();
-        out.print("\nEnter a password: ");
+        userName = in.nextLine();
+    
+        if(illegalUsernames.contains(userName)){ //Checks that username is not illegal.
+            out.print("Illegal username. Try again!\nUsername: ");
+            out.flush();
+            createUser();
+        }
+    
+        for(User userLogggedIn: chadChat.getActiveUsers()){ //Checks that user is not already logged in.
+            if(userLogggedIn.getUserName().equalsIgnoreCase(userName)){
+                out.print("Already logged in. Try again!\nUsername: ");
+                out.flush();
+                createUser();
+            }
+        }
+    
+        out.print("Enter password: ");
         out.flush();
-        String password = in.nextLine();
-        chadChat.createUserAndLogin(userName, password);
+        password = in.nextLine();
+    
+        curUser = chadChat.createUserAndLogin(userName, password);
 
         out.println("Welcome to ChadChat, " + userName);
         out.flush();
-
-        showChat();
+    
+        try {
+            showChat(); //Loads the chat.
+        } finally {
+            logout();
+        }
 
     }
 
     private void loginCheck() {
         String userName = "";
+        String password = "";
         int maxAttemps = 5;
         out.print("Enter your username: ");
         out.flush();
@@ -218,10 +239,14 @@ public class Menu {
                 loginCheck();
             }
         }
-
+    
+        out.print("Enter your password: ");
+        out.flush();
+        password = in.nextLine();
+        
 
         try {
-            curUser = chadChat.userLogin(userName, "1234");
+            curUser = chadChat.userLogin(userName, password);
         } catch (InvalidPassword invalidPassword) {
             invalidPassword.printStackTrace();
         }
@@ -236,10 +261,17 @@ public class Menu {
                         System.out.println(e);
                     }
                 }
-                out.print("Wrong username. " + maxAttemps + " attemps left. Try again!\nUsername: ");
+                out.print("Wrong username/password. " + maxAttemps + " attemps left. Try again!\nUsername: ");
                 out.flush();
                 userName = in.nextLine();
-                curUser = chadChat.userLogin(userName);
+                out.print("\nPassword: ");
+                out.flush();
+                password = in.nextLine();
+                try {
+                    curUser = chadChat.userLogin(userName, password);
+                } catch (InvalidPassword invalidPassword) {
+                    invalidPassword.printStackTrace();
+                }
             }
         }
     

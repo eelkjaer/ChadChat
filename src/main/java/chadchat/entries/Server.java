@@ -27,17 +27,18 @@ public class Server implements Runnable{
         return new SimpleDateFormat("HH:mm:ss").format(new Date());
     }
     
-    public void stopServer(){
+    public static void stopServer(){
         keepRunning = false;
+        System.exit(0);
     }
     
     public static void main(String[] args) throws IOException {
+        final int port = 6999;
+        final ServerSocket serverSocket = new ServerSocket(port);
+        final ChadChat chadChat = new ChadChat();
+        String timestamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
+        
         while(keepRunning) {
-            final int port = 6999;
-            final ServerSocket serverSocket = new ServerSocket(port);
-            final ChadChat chadChat = new ChadChat();
-            String timestamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
-            
             Socket socket = serverSocket.accept();
             System.out.println(timestamp + " [CONNECTED] " + socket.getInetAddress()
                         + " port " + socket.getPort()
@@ -46,7 +47,6 @@ public class Server implements Runnable{
             Thread thread = new Thread(new Server(socket, chadChat));
             thread.start();
         }
-        System.exit(0);
     }
     
     @Override

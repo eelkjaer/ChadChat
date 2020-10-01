@@ -19,21 +19,23 @@ public class ChadChat {
 
     public User userLogin(String username, String password) throws InvalidPassword {
         User user = db.checkLogin(username);
-        user.checkPassword(password);
+        
         if (!user.checkPassword(password)) {
             throw new InvalidPassword();
         }
+        
         synchronized (this) {
             activeUsers.add(user);
         }
         return user;
     }
+    
 
     public User createUserAndLogin(String userName, String password) {
         byte[] salt = User.generateSalt();
         User user = db.createUser(userName, salt, User.calculateSecret(salt, password));
         try {
-            return userLogin(userName, password);
+            return userLogin(user.getUserName(), password);
         } catch (InvalidPassword invalidPassword) {
             throw new RuntimeException(invalidPassword);
         }
