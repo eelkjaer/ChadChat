@@ -30,6 +30,7 @@ public class User {
     private final String userName;
     private final LocalDateTime timestamp;
     private final boolean admin;
+
     private final byte[] salt;
     private final byte[] secret;
 
