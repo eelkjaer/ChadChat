@@ -2,6 +2,7 @@ package chadchat.UI;
 
 import chadchat.api.ChadChat;
 import chadchat.domain.Message.Message;
+import chadchat.domain.User.InvalidPassword;
 import chadchat.domain.User.User;
 import chadchat.entries.Client;
 import chadchat.infrastructure.Database;
@@ -151,12 +152,17 @@ public class Menu {
         }
     }
 
-    private void createUser() { //TODO @Peter
+    private void createUser() {
         out.print("Enter your name: ");
         out.flush();
         String userName = in.nextLine();
+        out.print("\nEnter a password: ");
+        out.flush();
+        String password = in.nextLine();
+        chadChat.createUserAndLogin(userName, password);
 
         out.println("Welcome to ChadChat, " + userName);
+        out.flush();
 
         showChat();
 
@@ -182,7 +188,11 @@ public class Menu {
             }
         }
 
-        curUser = chadChat.userLogin(userName);
+        try {
+            curUser = chadChat.userLogin(userName, "1234");
+        } catch (InvalidPassword invalidPassword) {
+            invalidPassword.printStackTrace();
+        }
 
         while (true) {
             if (!(curUser == null)) {

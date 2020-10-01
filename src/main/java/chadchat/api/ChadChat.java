@@ -1,6 +1,7 @@
 package chadchat.api;
 
 import chadchat.domain.Message.Message;
+import chadchat.domain.User.InvalidPassword;
 import chadchat.domain.User.User;
 import chadchat.infrastructure.Database;
 
@@ -14,12 +15,28 @@ public class ChadChat {
     private final Database db = new Database();
     private final Set<User> blocked = new HashSet<>();
 
-    public User userLogin(String username) {
+    public User userLogin(String username, String password) throws InvalidPassword {
         User user = db.checkLogin(username);
+        user.checkPassword(password);
+        if (!user.checkPassword(password)) {
+            throw new InvalidPassword();
+        }
         synchronized (this) {
             activeUsers.add(user);
         }
         return user;
+    }
+
+
+
+    public User createUserAndLogin(String userName, String password) {
+        byte[] salt = User.generateSalt();
+        User user = db.createUser(userName, salt, User.calculateSecret(salt, password));
+        try {
+            return userLogin(userName, password);
+        } catch (InvalidPassword invalidPassword) {
+            throw new RuntimeException(invalidPassword);
+        }
     }
 
     public synchronized void logout(User user) {

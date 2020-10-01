@@ -68,8 +68,8 @@ CREATE TABLE `User` (
                         `userName` varchar(255) NOT NULL,
                         `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         `admin` tinyint(1) NOT NULL DEFAULT '0',
-                        `users.salt` int NOT NULL,
-                        `users.secret` int NOT NULL,
+                        `salt` BINARY(16) NOT NULL,
+                        `secret`  BINARY(32) NOT NULL,
                         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 

@@ -68,8 +68,8 @@ public class Database implements MessageRepository {
                         rs.getString("userName"),
                         rs.getTimestamp("timestamp").toLocalDateTime(),
                         rs.getBoolean("admin"),
-                        rs.getBytes("users.salt"),
-                        rs.getBytes("users.secret"));
+                        rs.getBytes("salt"),
+                        rs.getBytes("secret"));
             }
             System.out.println("You're connected to CHADCHAT");
         } catch (SQLException e){
@@ -78,20 +78,18 @@ public class Database implements MessageRepository {
         return null;
     }
 
-    public User createUser(String userName) {
+    public User createUser(String userName, byte[] salt, byte[] secret) {
         int id = -1;
         try (Connection conn = Database.getConnection()) {
             String sql;
-            sql = "INSERT INTO User(userName) VALUES (?)";
+            sql = "INSERT INTO User(userName, salt, secret) VALUES (?, ?, ?)";
 
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, userName);
-
-
+            stmt.setBytes(2, salt);
+            stmt.setBytes(3, secret);
             stmt.executeUpdate();
-
             ResultSet rs = stmt.getGeneratedKeys();
-
             if (rs.next()) {
                 id = rs.getInt(1);
 
@@ -130,8 +128,8 @@ public class Database implements MessageRepository {
                 rs.getString("user.userName"),
                 rs.getTimestamp("user.timestamp").toLocalDateTime(),
                 rs.getBoolean("user.admin"),
-        rs.getBytes("users.salt"),
-        rs.getBytes("users.secret"));
+                rs.getBytes("user.salt"),
+                rs.getBytes("user.secret"));
     }
 
 
@@ -143,12 +141,8 @@ public class Database implements MessageRepository {
 
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, channelName);
-
-
             stmt.executeUpdate();
-
             ResultSet rs = stmt.getGeneratedKeys();
-
             if (rs.next()) {
                 id = rs.getInt(1);
 
@@ -260,4 +254,5 @@ public class Database implements MessageRepository {
         }
         return findMessage(id);
     }
+
 }
