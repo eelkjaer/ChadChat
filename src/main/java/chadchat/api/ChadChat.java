@@ -2,8 +2,10 @@ package chadchat.api;
 
 import chadchat.domain.Message.Message;
 import chadchat.domain.User.User;
+import chadchat.entries.Client;
 import chadchat.infrastructure.Database;
 
+import java.net.Socket;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,8 +24,13 @@ public class ChadChat {
         return user;
     }
 
-    public synchronized void logout(User user) {
-        activeUsers.remove(user);
+    public synchronized void logout(User user, Socket socket) {
+        try {
+            activeUsers.remove(user);
+            socket.close();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         
     }
     

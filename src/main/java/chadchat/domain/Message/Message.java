@@ -2,8 +2,6 @@ package chadchat.domain.Message;
 
 import chadchat.domain.User.User;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Message {
@@ -44,15 +42,14 @@ public class Message {
     
     @Override
     public String toString() {
-        String said = "said";
-        if(user.getUserName().equalsIgnoreCase("system")) {
-            said = "";
-        }
-        return String.format("%s %s %s: %s",
+        String username = user.getUserName();
+        
+        //if(user.isAdmin()) username = "<ADMIN> " + username;
+        
+        return String.format("[%s] %s: %s",
                 timestamp.toLocalTime().toString(),
-                user.getUserName(),
-                said,
+                username,
                 messageText
-                );
+        );
     }
 }

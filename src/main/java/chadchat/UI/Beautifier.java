@@ -27,29 +27,29 @@ public class Beautifier{
      * @return Nicely formatted string ready to print.
      */
     public String generateMenuStr(String[] menuItems){
-        String str = "";
+        StringBuilder str = new StringBuilder();
         int i = 1;
-        str += "\n##########################\n"; //Start of Menu divider
-        str += "# Please select a option #\n"; //Start of Menu divider
-        str += "##########################\n"; //Start of Menu divider
+        str.append("\n##########################\n"); //Start of Menu divider
+        str.append("# Please select a option #\n"); //Start of Menu divider
+        str.append("##########################\n"); //Start of Menu divider
         for(String s: menuItems){
             i++;
-            str += "\t[" + (i-1) + "] " + s + "\n";
+            str.append("\t[").append(i - 1).append("] ").append(s).append("\n");
         }
-        str += "##########################\n"; //End of Menu divider
+        str.append("##########################\n"); //End of Menu divider
 
-        return str;
+        return str.toString();
     }
     
     public String generateCmdMenuStr(HashMap<String,String> menuItems){
-        String str = "";
-        str += "##########################\n"; //Start of Menu divider
+        StringBuilder str = new StringBuilder();
+        str.append("##########################\n"); //Start of Menu divider
         for(Map.Entry<String, String> menu: menuItems.entrySet()){
-            str += "\"!" + menu.getKey() + "\" \t" + menu.getValue() + " \n";
+            str.append("\"!").append(menu.getKey()).append("\" \t").append(menu.getValue()).append(" \n");
         }
-        str += "##########################\n"; //End of Menu divider
+        str.append("##########################\n"); //End of Menu divider
         
-        return str;
+        return str.toString();
     }
 
     /**
