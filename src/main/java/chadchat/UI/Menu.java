@@ -200,6 +200,7 @@ public class Menu {
             showChat();
         } finally {
             chadChat.logout(curUser);
+            curUser = null;
         }
     }
 }

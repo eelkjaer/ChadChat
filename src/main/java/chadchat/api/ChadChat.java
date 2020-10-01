@@ -24,6 +24,7 @@ public class ChadChat {
 
     public synchronized void logout(User user) {
         activeUsers.remove(user);
+        
     }
     
     public synchronized void setBlocked(User user, User admin) {
