@@ -3,8 +3,10 @@ package chadchat.api;
 import chadchat.domain.Message.Message;
 import chadchat.domain.User.InvalidPassword;
 import chadchat.domain.User.User;
+import chadchat.entries.Client;
 import chadchat.infrastructure.Database;
 
+import java.net.Socket;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,8 +29,6 @@ public class ChadChat {
         return user;
     }
 
-
-
     public User createUserAndLogin(String userName, String password) {
         byte[] salt = User.generateSalt();
         User user = db.createUser(userName, salt, User.calculateSecret(salt, password));
@@ -39,8 +39,14 @@ public class ChadChat {
         }
     }
 
-    public synchronized void logout(User user) {
-        activeUsers.remove(user);
+   
+    public synchronized void logout(User user, Socket socket) {
+        try {
+            activeUsers.remove(user);
+            socket.close();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         
     }
     

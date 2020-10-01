@@ -3,9 +3,11 @@ package chadchat.entries;
 import chadchat.api.ChadChat;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -25,30 +27,35 @@ public class Server implements Runnable{
         return new SimpleDateFormat("HH:mm:ss").format(new Date());
     }
     
+    public void stopServer(){
+        keepRunning = false;
+    }
+    
     public static void main(String[] args) throws IOException {
-        final int port = 6999;
-        final ServerSocket serverSocket = new ServerSocket(port);
-        final ChadChat chadChat = new ChadChat();
-        String timestamp = new SimpleDateFormat("HH:MM:ss").format(new Date());
-        
         while(keepRunning) {
+            final int port = 6999;
+            final ServerSocket serverSocket = new ServerSocket(port);
+            final ChadChat chadChat = new ChadChat();
+            String timestamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
+            
             Socket socket = serverSocket.accept();
             System.out.println(timestamp + " [CONNECTED] " + socket.getInetAddress()
-                    + " port " + socket.getPort()
-                    + " server port " + socket.getLocalPort());
-            
+                        + " port " + socket.getPort()
+                        + " server port " + socket.getLocalPort());
+                
             Thread thread = new Thread(new Server(socket, chadChat));
             thread.start();
         }
+        System.exit(0);
     }
     
     @Override
     public synchronized void run() {
         try {
-            Scanner in = new Scanner(socket.getInputStream());
+            Scanner in = new Scanner(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             
-            Client client = new Client(in,out,chadChat,socket);
+            Client client = new Client(in,out,chadChat,socket,this);
             chadChat.registerMessageObserver(client);
             client.run();
             
