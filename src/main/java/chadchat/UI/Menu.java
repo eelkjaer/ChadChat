@@ -151,7 +151,7 @@ public class Menu {
         }
     }
 
-    private void createUser() {
+    private void createUser() { //TODO @Peter
         out.print("Enter your name: ");
         out.flush();
         String userName = in.nextLine();
@@ -171,8 +171,15 @@ public class Menu {
         if(illegalUsernames.contains(userName)){
             out.print("Illegal username. Try again!\nUsername: ");
             out.flush();
-            userName = in.nextLine();
-            curUser = db.checkLogin(userName);
+            loginCheck();
+        }
+        
+        for(User userLogggedIn: chadChat.getActiveUsers()){
+            if(userLogggedIn.getUserName().equalsIgnoreCase(userName)){
+                out.print("Already logged in. Try again!\nUsername: ");
+                out.flush();
+                loginCheck();
+            }
         }
 
         curUser = chadChat.userLogin(userName);

@@ -21,7 +21,7 @@ public class Database implements MessageRepository {
     static final String PASS = "familiebil";
 
     // Database version
-    private static final int version = 2;
+    private static final int version = 1;
 
     public Database() {
         if (getCurrentVersion() != getVersion()) {
