@@ -137,7 +137,7 @@ public class Database implements MessageRepository {
         int id = -1;
         try (Connection conn = Database.getConnection()) {
             String sql;
-            sql = "INSERT INTO Channels(channelName) VALUES (?)";
+            sql = "INSERT INTO Channels(name) VALUES (?)";
 
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, channelName);
@@ -145,14 +145,11 @@ public class Database implements MessageRepository {
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 id = rs.getInt(1);
-
             } else {
                 System.out.println("elsa");
-
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-
         }
         return findChannel(id);
     }
@@ -177,8 +174,8 @@ public class Database implements MessageRepository {
     private Channel loadChannel(ResultSet rs) throws SQLException {
         return new Channel(
                 rs.getInt("channels.id"),
-                rs.getString("channels.channelName"),
-                rs.getTimestamp("channels.timestamp").toLocalDateTime());
+                rs.getString("channels.name"));
+                // rs.getTimestamp("channels.timestamp").toLocalDateTime());
         // rs.getBytes("users.salt"),
         // rs.getBytes("users.secret"));
     }
@@ -255,4 +252,8 @@ public class Database implements MessageRepository {
         return findMessage(id);
     }
 
+    public static void main(String[] args) {
+        Database database = new Database();
+        database.createChannel("NewChannel");
+    }
 }

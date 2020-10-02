@@ -96,6 +96,7 @@ public class Menu {
     
     private HashMap<String, String> helpMenu(){
         HashMap<String, String> menuItems = new HashMap<>();
+        menuItems.put("Channel","Create a new chat channel");
         menuItems.put("help","Shows all available commands");
         menuItems.put("quit","Will log you out.");
         menuItems.put("users","Lists all active users");
