@@ -57,10 +57,10 @@ public class ChadChat {
         try {
             activeUsers.remove(user);
             socket.close();
-        } catch (Exception e){
+        }
+        catch (Exception e){
             System.out.println(e.getMessage());
         }
-        
     }
     
     public synchronized void setBlocked(User user, User admin) {

@@ -176,6 +176,11 @@ public class Menu {
                 out.println(e.getMessage());
                 out.flush();
 
+            } finally {
+                if (curUser != null ) {
+                    chatting = false;
+                    logout();;
+                }
             }
         }
     }

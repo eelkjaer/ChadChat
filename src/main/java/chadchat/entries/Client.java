@@ -80,12 +80,10 @@ public class Client implements Runnable, ChadChat.MessageObserver {
                 menu = new Menu(in, out, chadChat, socket, this);
                 menu.showMenu();
                 out.flush();
-
             }
             catch (IOException e) {
                 System.out.println("Er det her?");
                 e.getMessage();
-
             }
         }
     }
