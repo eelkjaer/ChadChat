@@ -1,5 +1,6 @@
 package chadchat.infrastructure;
 
+import chadchat.UI.Menu;
 import chadchat.domain.Channel.Channel;
 import chadchat.domain.Message.Message;
 import chadchat.domain.Message.MessageExists;
@@ -180,6 +181,26 @@ public class Database implements MessageRepository {
         // rs.getBytes("users.secret"));
     }
 
+    // Load in Channels to channelListS
+    //@Override
+    public Iterable<Channel> findAllChannels(int id) {
+        try (Connection conn = getConnection()) {
+            PreparedStatement s = conn.prepareStatement("SELECT * FROM Channels WHERE id>?;");
+            s.setInt(1, id);
+            ResultSet rs = s.executeQuery();
+            ArrayList<Channel> channelList = new ArrayList<>();
+            while(rs.next()) {
+                channelList.add(loadChannel(rs));
+            }
+            for (Channel x: channelList) {
+
+            }
+            return channelList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Message findMessage(int id) throws NoSuchElementException {
         try(Connection conn = getConnection()) {
             PreparedStatement s = conn.prepareStatement(
@@ -252,8 +273,5 @@ public class Database implements MessageRepository {
         return findMessage(id);
     }
 
-    public static void main(String[] args) {
-        Database database = new Database();
-        database.createChannel("NewChannel");
-    }
+
 }
