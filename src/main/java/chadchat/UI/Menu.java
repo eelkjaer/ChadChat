@@ -97,21 +97,17 @@ public class Menu {
         }
     }
 
-    public void loadCreateChannel() {
-        Channel tmpChannel = null;
-        out.println("\nCreate new Chatroom, press 1");
+    public void createChannel() {
+        out.print("Write Channel name: ");
         out.flush();
-        int x = in.nextInt();
-        if (x == 1) {
-            out.flush();
-            out.print("Write Channel name: ");
-            out.flush();
-            String channelName = in.next();
-            tmpChannel = chadChat.createChannel(channelName, curUser);
-        }
+        String channelName = in.nextLine();
+        Channel tmpChannel = chadChat.createChannel(channelName, curUser);
         
         if(tmpChannel != null){
             chadChat.setCurChannel(tmpChannel);
+        } else {
+            out.println("Error creating channel. Try again.");
+            createChannel();
         }
     }
 
@@ -174,7 +170,7 @@ public class Menu {
                         loadChannels();
                         break;
                     case "!createchannel":
-                        loadCreateChannel();
+                        createChannel();
                         break;
                     case "!changechannel":
                         changeChannel();

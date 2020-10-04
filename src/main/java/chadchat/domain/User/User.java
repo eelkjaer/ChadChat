@@ -100,8 +100,7 @@ public class User {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", timestamp=" + timestamp +
-                ", salt=" + byteArrayToHex(salt) +
-                ", secret=" + byteArrayToHex(secret) +
+                ", admin=" + admin +
                 '}';
     }
 
