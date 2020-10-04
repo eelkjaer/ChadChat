@@ -1,6 +1,7 @@
 package chadchat.UI;
 
 import chadchat.api.ChadChat;
+import chadchat.domain.Channel.Channel;
 import chadchat.domain.Message.Message;
 import chadchat.domain.User.InvalidPassword;
 import chadchat.domain.User.User;
@@ -93,9 +94,33 @@ public class Menu {
             out.flush();
         }
     }
+
+    public void loadCreateChannel() {
+        out.println("\nCreate new Chatroom, press 1");
+        out.flush();
+        int x = in.nextInt();
+        if (x == 1) {
+            out.flush();
+            out.print("Write Channel name: ");
+            out.flush();
+            String channelName = in.next();
+            chadChat.createChannel(channelName);
+        }
+        loadChannels();
+
+    }
+
+    public void loadChannels() {
+        out.println("\nAvailable Chatrooms");
+        for (Channel channel : db.findAllChannels(0)) {
+            out.println(channel);
+            out.flush();
+        }
+    }
     
     private HashMap<String, String> helpMenu(){
         HashMap<String, String> menuItems = new HashMap<>();
+        menuItems.put("Channel","Create a new chat channel");
         menuItems.put("help","Shows all available commands");
         menuItems.put("quit","Will log you out.");
         menuItems.put("users","Lists all active users");
@@ -110,13 +135,16 @@ public class Menu {
 
     public void showChat() {
         loadChat();
-        boolean chatting = true;
         out.flush();
+        loadChannels();
+        out.flush();
+        loadCreateChannel();
+        out.flush();
+        boolean chatting = true;
         while (chatting) {
             try {
                 out.print("> ");
                 out.flush();
-
                 String msg = in.nextLine();
                 
                 switch (msg){
@@ -174,10 +202,16 @@ public class Menu {
             } catch (Exception e) {
                 out.println(e.getMessage());
                 out.flush();
+                //finally {
+                    if (curUser != null ) {
+                        System.out.println("Test4");
+                        chatting = false;
+                        logout();;
+                    }
+                }
 
             }
         }
-    }
 
     private void createUser() {
         String userName = "";
@@ -284,5 +318,7 @@ public class Menu {
             logout();
         }
     }
+
+
 }
 

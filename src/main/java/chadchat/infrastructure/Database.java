@@ -1,5 +1,6 @@
 package chadchat.infrastructure;
 
+import chadchat.UI.Menu;
 import chadchat.domain.Channel.Channel;
 import chadchat.domain.Message.Message;
 import chadchat.domain.Message.MessageExists;
@@ -137,7 +138,7 @@ public class Database implements MessageRepository {
         int id = -1;
         try (Connection conn = Database.getConnection()) {
             String sql;
-            sql = "INSERT INTO Channels(channelName) VALUES (?)";
+            sql = "INSERT INTO Channels(name) VALUES (?)";
 
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, channelName);
@@ -145,14 +146,11 @@ public class Database implements MessageRepository {
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 id = rs.getInt(1);
-
             } else {
                 System.out.println("elsa");
-
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-
         }
         return findChannel(id);
     }
@@ -177,10 +175,30 @@ public class Database implements MessageRepository {
     private Channel loadChannel(ResultSet rs) throws SQLException {
         return new Channel(
                 rs.getInt("channels.id"),
-                rs.getString("channels.channelName"),
-                rs.getTimestamp("channels.timestamp").toLocalDateTime());
+                rs.getString("channels.name"));
+                // rs.getTimestamp("channels.timestamp").toLocalDateTime());
         // rs.getBytes("users.salt"),
         // rs.getBytes("users.secret"));
+    }
+
+    // Load in Channels to channelListS
+    //@Override
+    public Iterable<Channel> findAllChannels(int id) {
+        try (Connection conn = getConnection()) {
+            PreparedStatement s = conn.prepareStatement("SELECT * FROM Channels WHERE id>?;");
+            s.setInt(1, id);
+            ResultSet rs = s.executeQuery();
+            ArrayList<Channel> channelList = new ArrayList<>();
+            while(rs.next()) {
+                channelList.add(loadChannel(rs));
+            }
+            for (Channel x: channelList) {
+
+            }
+            return channelList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Message findMessage(int id) throws NoSuchElementException {
@@ -254,5 +272,6 @@ public class Database implements MessageRepository {
         }
         return findMessage(id);
     }
+
 
 }

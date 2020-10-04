@@ -1,9 +1,9 @@
 package chadchat.api;
 
+import chadchat.domain.Channel.Channel;
 import chadchat.domain.Message.Message;
 import chadchat.domain.User.InvalidPassword;
 import chadchat.domain.User.User;
-import chadchat.entries.Client;
 import chadchat.infrastructure.Database;
 
 import java.net.Socket;
@@ -17,19 +17,27 @@ public class ChadChat {
     private final Database db = new Database();
     private final Set<User> blocked = new HashSet<>();
 
+    private final Set<Channel> listChannels = new HashSet<>();
+
+    public void availableChannels() {
+        Iterable<Channel> channel = db.findAllChannels(0);
+    }
+
     public User userLogin(String username, String password) throws InvalidPassword {
         User user = db.checkLogin(username);
-        
         if (!user.checkPassword(password)) {
             throw new InvalidPassword();
         }
-        
         synchronized (this) {
             activeUsers.add(user);
         }
         return user;
     }
-    
+
+    public Channel createChannel(String channelName) {
+        Channel channel = db.createChannel(channelName);
+        return channel;
+    }
 
     public User createUser(String userName, String password) {
         byte[] salt = User.generateSalt();
@@ -52,15 +60,14 @@ public class ChadChat {
                 msg);
     }
 
-   
     public synchronized void logout(User user, Socket socket) {
         try {
             activeUsers.remove(user);
             socket.close();
-        } catch (Exception e){
+        }
+        catch (Exception e){
             System.out.println(e.getMessage());
         }
-        
     }
     
     public synchronized void setBlocked(User user, User admin) {
