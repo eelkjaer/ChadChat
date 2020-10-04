@@ -8,11 +8,13 @@ import chadchat.domain.User.User;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Client implements Runnable, ChadChat.MessageObserver {
@@ -51,8 +53,9 @@ public class Client implements Runnable, ChadChat.MessageObserver {
     
     @Override
     public void notifyNewMessages(Channel channel) {
+        Channel myChannel = chadChat.getCurrentUserChannel(menu.getCurUser());
         for (Message m : chadChat.getNewMessages(lastSeenMsg)) {
-            if(m.getChannel().equals(channel)){
+            if(m.getChannel().equals(myChannel)){
                 out.println(m);
                 out.flush();
                 lastSeenMsg = m.getId();
@@ -78,14 +81,13 @@ public class Client implements Runnable, ChadChat.MessageObserver {
         while (!shutdown) {
             try {
                 Scanner in = new Scanner(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-                PrintWriter out = new PrintWriter(socket.getOutputStream());
+                PrintWriter out = new PrintWriter(socket.getOutputStream(),true, StandardCharsets.UTF_8);
                 
                 menu = new Menu(in, out, chadChat, socket, this);
                 menu.showMenu();
                 out.flush();
             }
             catch (IOException e) {
-                System.out.println("Er det her?");
                 e.getMessage();
             }
         }

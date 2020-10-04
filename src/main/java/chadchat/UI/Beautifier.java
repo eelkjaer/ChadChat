@@ -2,13 +2,15 @@ package chadchat.UI;
 
 import chadchat.domain.User.User;
 
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 //@author Emil Elkjær Nielsen (cph-en93@cphbusiness.dk)
 public class Beautifier{
-    private final Scanner input = new Scanner(System.in);
+    private final Scanner input = new Scanner(new InputStreamReader(System.in, StandardCharsets.UTF_8));
 
     /**
      * @param str String to be printed in console.

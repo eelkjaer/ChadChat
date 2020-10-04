@@ -7,15 +7,13 @@ import chadchat.domain.User.User;
 import chadchat.infrastructure.Database;
 
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ChadChat {
     private final Database db = new Database();
     private final Set<MessageObserver> messageObservers = new HashSet<>();
-    private final Set<User> activeUsers = new HashSet<>();
     private final Set<User> blocked = new HashSet<>();
+    private final Map<User, Channel> userChannel = new HashMap<>();
 
     public User userLogin(String username, String password) throws InvalidPassword {
         User user = db.checkLogin(username);
@@ -23,7 +21,7 @@ public class ChadChat {
             throw new InvalidPassword();
         }
         synchronized (this) {
-            activeUsers.add(user);
+            userChannel.put(user, getChannelById(1));
         }
         return user;
     }
@@ -74,7 +72,7 @@ public class ChadChat {
 
     public synchronized void logout(User user, Socket socket) {
         try {
-            activeUsers.remove(user);
+            userChannel.remove(user);
             socket.close();
         }
         catch (Exception e){
@@ -113,7 +111,7 @@ public class ChadChat {
     }
     
     public User findActiveUser(String username){
-        for(User u: activeUsers){
+        for(User u: userChannel.keySet()){
             if(u.getUserName().equalsIgnoreCase(username)){
                 return u;
             }
@@ -121,7 +119,16 @@ public class ChadChat {
         return null;
     }
     
-
+    public void setCurrentChannel(User curUser, Channel channel) {
+               userChannel.put(curUser, channel);
+            }
+    
+    public Channel getCurrentUserChannel(User curUser) {
+                return userChannel.get(curUser);
+    }
+    
+    
+    
     public void createMessage(User user, Message message) {
         db.createMessage(user, message);
         synchronized (this) {
@@ -140,7 +147,7 @@ public class ChadChat {
     }
 
     public synchronized Iterable<User> getActiveUsers() {
-        return List.copyOf(activeUsers);
+        return List.copyOf(userChannel.keySet());
     }
 
 

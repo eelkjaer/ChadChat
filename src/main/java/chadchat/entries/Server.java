@@ -4,6 +4,7 @@ import chadchat.api.ChadChat;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -52,8 +53,8 @@ public class Server implements Runnable{
     @Override
     public synchronized void run() {
         try {
-            Scanner in = new Scanner(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            Scanner in = new Scanner(socket.getInputStream(), StandardCharsets.UTF_8);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(),true,StandardCharsets.UTF_8);
             
             Client client = new Client(in,out,chadChat,socket,this);
             chadChat.registerMessageObserver(client);

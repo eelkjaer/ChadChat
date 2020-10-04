@@ -107,6 +107,7 @@ public class Menu {
         
         if(tmpChannel != null){
             curChannel = tmpChannel;
+            chadChat.setCurrentChannel(curUser,curChannel);
         } else {
             out.println("Error creating channel. Try again.");
             createChannel();
@@ -151,6 +152,7 @@ public class Menu {
                 out.print("> ");
                 out.flush();
                 String msg = in.nextLine();
+                System.out.println("MSG: " + msg);
                 
                 switch (msg){
                     case "!help":
@@ -217,14 +219,11 @@ public class Menu {
             } catch (Exception e) {
                 out.println(e.getMessage());
                 out.flush();
-                //finally {
                     if (curUser != null ) {
-                        System.out.println("Test4");
                         chatting = false;
                         logout();
                     }
                 }
-
             }
         }
         
@@ -236,7 +235,8 @@ public class Menu {
             
             Channel tmpChannel = chadChat.getChannelById(id);
             if(tmpChannel != null){
-                curChannel = tmpChannel;
+                chadChat.setCurrentChannel(curUser,tmpChannel);
+                curChannel = chadChat.getCurrentUserChannel(curUser);
                 out.println("You are now in: " + curChannel.getChannelName());
             } else {
                 out.println("Not valid channel id! Try again.");
@@ -345,6 +345,7 @@ public class Menu {
         System.out.println("Connected: " + curUser);
         try {
             curChannel = chadChat.getChannelById(1);
+            chadChat.setCurrentChannel(curUser,curChannel);
             showChat(); //Loads the chat.
         } finally {
             logout();
