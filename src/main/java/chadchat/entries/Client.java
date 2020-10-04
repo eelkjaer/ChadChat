@@ -2,6 +2,7 @@ package chadchat.entries;
 
 import chadchat.UI.Menu;
 import chadchat.api.ChadChat;
+import chadchat.domain.Channel.Channel;
 import chadchat.domain.Message.Message;
 import chadchat.domain.User.User;
 
@@ -49,9 +50,9 @@ public class Client implements Runnable, ChadChat.MessageObserver {
     }
     
     @Override
-    public void notifyNewMessages() {
+    public void notifyNewMessages(Channel channel) {
         for (Message m : chadChat.getNewMessages(lastSeenMsg)) {
-            if(m.getChannel().equals(chadChat.getCurChannel())){
+            if(m.getChannel().equals(channel)){
                 out.println(m);
                 out.flush();
                 lastSeenMsg = m.getId();

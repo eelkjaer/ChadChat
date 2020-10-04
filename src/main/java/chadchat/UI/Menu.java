@@ -17,12 +17,14 @@ public class Menu {
 
     private final Beautifier beauty = new Beautifier();
     private final Database db = new Database();
-    private User curUser;
     private final ChadChat chadChat;
     private final Scanner in;
     private final PrintWriter out;
     private final Socket socket;
     private final Client client;
+    
+    private User curUser;
+    private Channel curChannel;
     
     private final List<String> illegalUsernames = new ArrayList<>() {
         {
@@ -90,7 +92,7 @@ public class Menu {
     
     public void loadChat() {
         for (Message tmpMsg : db.findAllMessages(1)) {
-            if(tmpMsg.getChannel().equals(chadChat.getCurChannel())){
+            if(tmpMsg.getChannel().equals(curChannel)){
                 out.println(tmpMsg);
                 out.flush();
             }
@@ -104,7 +106,7 @@ public class Menu {
         Channel tmpChannel = chadChat.createChannel(channelName, curUser);
         
         if(tmpChannel != null){
-            chadChat.setCurChannel(tmpChannel);
+            curChannel = tmpChannel;
         } else {
             out.println("Error creating channel. Try again.");
             createChannel();
@@ -114,7 +116,7 @@ public class Menu {
     public void loadChannels() {
         out.println("\nAvailable Chatrooms");
         for (Channel channel : chadChat.getAllChannels()) {
-            if(channel.equals(chadChat.getCurChannel())){
+            if(channel.equals(curChannel)){
                 out.println(channel + " <Currently in this>");
             } else {
                 out.println(channel);
@@ -207,7 +209,8 @@ public class Menu {
                         }
                         break;
                     default:
-                        chadChat.createMessage(curUser, msg, chadChat.getCurChannel());
+                        Message tmpMsg = new Message(msg, curChannel);
+                        chadChat.createMessage(curUser, tmpMsg);
                         break;
                 }
 
@@ -233,8 +236,8 @@ public class Menu {
             
             Channel tmpChannel = chadChat.getChannelById(id);
             if(tmpChannel != null){
-                chadChat.setCurChannel(tmpChannel);
-                out.println("You are now in: " + chadChat.getCurChannel().getChannelName());
+                curChannel = tmpChannel;
+                out.println("You are now in: " + curChannel.getChannelName());
             } else {
                 out.println("Not valid channel id! Try again.");
                 out.flush();
@@ -341,7 +344,7 @@ public class Menu {
         out.println("Welcome to ChadChat, " + userName);
         System.out.println("Connected: " + curUser);
         try {
-            chadChat.setCurChannel(chadChat.getChannelById(1));
+            curChannel = chadChat.getChannelById(1);
             showChat(); //Loads the chat.
         } finally {
             logout();

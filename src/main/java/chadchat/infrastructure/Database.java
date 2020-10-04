@@ -239,7 +239,7 @@ public class Database implements MessageRepository {
     }
     
     @Override
-    public Message createMessage(String messageText, User user, Channel channel) {
+    public Message createMessage(User user, Message message) {
         int id;
         try (Connection conn = getConnection()) {
             var ps =
@@ -247,9 +247,9 @@ public class Database implements MessageRepository {
                             "INSERT INTO Messages (messageText, userid, channelId) " +
                                     "VALUE (?,?,?);",
                             Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, messageText);
+            ps.setString(1, message.getMessageText());
             ps.setInt(2,user.getId());
-            ps.setInt(3,channel.getId());
+            ps.setInt(3,message.getChannel().getId());
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {

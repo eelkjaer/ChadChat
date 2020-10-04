@@ -4,5 +4,5 @@ import chadchat.domain.Channel.Channel;
 import chadchat.domain.User.User;
 
 public interface MessageFactory {
-    Message createMessage(String messageText, User user, Channel channel);
+    Message createMessage(User user, Message message);
 }

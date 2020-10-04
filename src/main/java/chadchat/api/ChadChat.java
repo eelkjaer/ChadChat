@@ -16,8 +16,6 @@ public class ChadChat {
     private final Set<MessageObserver> messageObservers = new HashSet<>();
     private final Set<User> activeUsers = new HashSet<>();
     private final Set<User> blocked = new HashSet<>();
-    
-    private volatile Channel curChannel = null;
 
     public User userLogin(String username, String password) throws InvalidPassword {
         User user = db.checkLogin(username);
@@ -30,12 +28,8 @@ public class ChadChat {
         return user;
     }
     
-    public Channel getCurChannel() {
-        return curChannel;
-    }
-    
-    public void setCurChannel(Channel channel){
-        this.curChannel = channel;
+    public Message createTmpMsg(String messageText, Channel channel){
+        return new Message(messageText,channel);
     }
     
     public Iterable<Channel> getAllChannels(){
@@ -74,8 +68,8 @@ public class ChadChat {
                 "SYSTEM",
                 null,
                 true, null, null ),
-                msg,
-                getChannelById(1));
+                createTmpMsg(msg,
+                getChannelById(1)));
     }
 
     public synchronized void logout(User user, Socket socket) {
@@ -97,10 +91,13 @@ public class ChadChat {
                 user.getUserName(),
                 admin.getUserName());
         
+        
+        
         createMessage(new User(1,
                 "SYSTEM",
                 null,
-                true, null, null ),blockedMsg,getChannelById(1));
+                true, null, null ),
+                createTmpMsg(blockedMsg,getChannelById(1)));
     }
     
     public synchronized void removeBlocked(User user) {
@@ -125,11 +122,11 @@ public class ChadChat {
     }
     
 
-    public void createMessage(User user, String msg, Channel channel) {
-        db.createMessage(msg, user, channel);
+    public void createMessage(User user, Message message) {
+        db.createMessage(user, message);
         synchronized (this) {
             for (MessageObserver messageObserver : messageObservers) {
-                messageObserver.notifyNewMessages();
+                messageObserver.notifyNewMessages(message.getChannel());
             }
         }
     }
@@ -148,7 +145,7 @@ public class ChadChat {
 
 
     public interface MessageObserver {
-        void notifyNewMessages();
+        void notifyNewMessages(Channel channel);
         void notifyUserBlocked();
     }
 

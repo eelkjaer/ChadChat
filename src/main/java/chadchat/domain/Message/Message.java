@@ -20,12 +20,12 @@ public class Message {
         this.channel = channel;
     }
     
-    public Message(String messageText){
+    public Message(String messageText, Channel channel){
         this.user = null;
         this.id = -1;
         this.messageText = messageText;
         this.timestamp = null;
-        this.channel = null;
+        this.channel = channel;
     }
 
     public int getId() {
