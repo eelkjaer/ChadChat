@@ -1,20 +1,36 @@
 package chadchat.domain.Channel;
 
-import java.time.LocalDateTime;
+import chadchat.domain.User.User;
+
+import java.util.Objects;
 
 public class Channel {
 
     private final int id;
     private final String channelName;
-    // private final LocalDateTime timestamp;
+    private final User owner;
 
 
-    public Channel(int id, String channelName) {
+    public Channel(int id, String channelName, User owner) {
         this.id = id;
         this.channelName = channelName;
-        // this.timestamp = timestamp;
+        this.owner = owner;
     }
-
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Channel channel = (Channel) o;
+        return id == channel.id &&
+                Objects.equals(channelName, channel.channelName);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, channelName);
+    }
+    
     public int getId() {
         return id;
     }
@@ -22,17 +38,13 @@ public class Channel {
     public String getChannelName() {
         return channelName;
     }
-
-    // public LocalDateTime getTimestamp() {
-       //  return timestamp;
-    // }
-
+    
+    public int getOwnerId() {
+        return owner.getId();
+    }
+    
     @Override
     public String toString() {
-        return "{" +
-                "id=" + id +
-                ", Channel name='" + channelName + '\'' +
-                // ", createdAt=" + timestamp +
-                '}';
+        return String.format("[%d] %s", id, channelName);
     }
 }

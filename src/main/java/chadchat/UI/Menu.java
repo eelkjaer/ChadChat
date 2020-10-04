@@ -90,12 +90,15 @@ public class Menu {
     
     public void loadChat() {
         for (Message tmpMsg : db.findAllMessages(1)) {
-            out.println(tmpMsg);
-            out.flush();
+            if(tmpMsg.getChannel().equals(chadChat.getCurChannel())){
+                out.println(tmpMsg);
+                out.flush();
+            }
         }
     }
 
     public void loadCreateChannel() {
+        Channel tmpChannel = null;
         out.println("\nCreate new Chatroom, press 1");
         out.flush();
         int x = in.nextInt();
@@ -104,24 +107,32 @@ public class Menu {
             out.print("Write Channel name: ");
             out.flush();
             String channelName = in.next();
-            chadChat.createChannel(channelName);
+            tmpChannel = chadChat.createChannel(channelName, curUser);
         }
-        loadChannels();
-
+        
+        if(tmpChannel != null){
+            chadChat.setCurChannel(tmpChannel);
+        }
     }
 
     public void loadChannels() {
         out.println("\nAvailable Chatrooms");
-        for (Channel channel : db.findAllChannels(0)) {
-            out.println(channel);
+        for (Channel channel : chadChat.getAllChannels()) {
+            if(channel.equals(chadChat.getCurChannel())){
+                out.println(channel + " <Currently in this>");
+            } else {
+                out.println(channel);
+            }
             out.flush();
         }
     }
     
     private HashMap<String, String> helpMenu(){
         HashMap<String, String> menuItems = new HashMap<>();
-        menuItems.put("Channel","Create a new chat channel");
         menuItems.put("help","Shows all available commands");
+        menuItems.put("channels","Show all available channels");
+        menuItems.put("changechannel","Changes to desired channel");
+        menuItems.put("createchannel","Create a new channel");
         menuItems.put("quit","Will log you out.");
         menuItems.put("users","Lists all active users");
         
@@ -135,10 +146,6 @@ public class Menu {
 
     public void showChat() {
         loadChat();
-        out.flush();
-        loadChannels();
-        out.flush();
-        loadCreateChannel();
         out.flush();
         boolean chatting = true;
         while (chatting) {
@@ -162,6 +169,15 @@ public class Menu {
                             out.println(u.getUserName());
                             out.flush();
                         }
+                        break;
+                    case "!channels":
+                        loadChannels();
+                        break;
+                    case "!createchannel":
+                        loadCreateChannel();
+                        break;
+                    case "!changechannel":
+                        changeChannel();
                         break;
                     case "!kick":
                         if(!curUser.isAdmin()) {
@@ -195,7 +211,7 @@ public class Menu {
                         }
                         break;
                     default:
-                        chadChat.createMessage(curUser, msg);
+                        chadChat.createMessage(curUser, msg, chadChat.getCurChannel());
                         break;
                 }
 
@@ -206,17 +222,33 @@ public class Menu {
                     if (curUser != null ) {
                         System.out.println("Test4");
                         chatting = false;
-                        logout();;
+                        logout();
                     }
                 }
 
             }
         }
+        
 
+        private void changeChannel(){
+            out.print("Enter channel id: ");
+            out.flush();
+            int id = Integer.parseInt(in.nextLine());
+            
+            Channel tmpChannel = chadChat.getChannelById(id);
+            if(tmpChannel != null){
+                chadChat.setCurChannel(tmpChannel);
+                out.println("You are now in: " + chadChat.getCurChannel().getChannelName());
+            } else {
+                out.println("Not valid channel id! Try again.");
+                out.flush();
+                changeChannel();
+            }
+        }
+        
     private void createUser() {
         String userName = "";
         String password = "";
-        int maxAttemps = 5;
         out.print("Enter username: ");
         out.flush();
         userName = in.nextLine();
@@ -313,6 +345,7 @@ public class Menu {
         out.println("Welcome to ChadChat, " + userName);
         System.out.println("Connected: " + curUser);
         try {
+            chadChat.setCurChannel(chadChat.getChannelById(1));
             showChat(); //Loads the chat.
         } finally {
             logout();

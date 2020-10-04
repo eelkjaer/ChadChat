@@ -1,5 +1,6 @@
 package chadchat.domain.Message;
 
+import chadchat.domain.Channel.Channel;
 import chadchat.domain.User.User;
 
 import java.time.LocalDateTime;
@@ -9,12 +10,14 @@ public class Message {
     private final String messageText;
     private final LocalDateTime timestamp;
     private final User user;
+    private final Channel channel;
 
-    public Message(int id, String messageText, LocalDateTime timestamp, User user) {
+    public Message(int id, String messageText, LocalDateTime timestamp, User user, Channel channel) {
         this.id = id;
         this.messageText = messageText;
         this.timestamp = timestamp;
         this.user = user;
+        this.channel = channel;
     }
     
     public Message(String messageText){
@@ -22,6 +25,7 @@ public class Message {
         this.id = -1;
         this.messageText = messageText;
         this.timestamp = null;
+        this.channel = null;
     }
 
     public int getId() {
@@ -40,13 +44,18 @@ public class Message {
         return user;
     }
     
+    public Channel getChannel(){
+        return channel;
+    }
+    
     @Override
     public String toString() {
         String username = user.getUserName();
         
         //if(user.isAdmin()) username = "<ADMIN> " + username;
         
-        return String.format("[%s] %s: %s",
+        return String.format("<%s> [%s] %s: %s",
+                channel.getChannelName(),
                 timestamp.toLocalTime().toString(),
                 username,
                 messageText

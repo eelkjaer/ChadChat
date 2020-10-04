@@ -12,16 +12,12 @@ import java.util.List;
 import java.util.Set;
 
 public class ChadChat {
+    private final Database db = new Database();
     private final Set<MessageObserver> messageObservers = new HashSet<>();
     private final Set<User> activeUsers = new HashSet<>();
-    private final Database db = new Database();
     private final Set<User> blocked = new HashSet<>();
-
-    private final Set<Channel> listChannels = new HashSet<>();
-
-    public void availableChannels() {
-        Iterable<Channel> channel = db.findAllChannels(0);
-    }
+    
+    private volatile Channel curChannel = null;
 
     public User userLogin(String username, String password) throws InvalidPassword {
         User user = db.checkLogin(username);
@@ -33,10 +29,31 @@ public class ChadChat {
         }
         return user;
     }
+    
+    public Channel getCurChannel() {
+        return curChannel;
+    }
+    
+    public void setCurChannel(Channel channel){
+        this.curChannel = channel;
+    }
+    
+    public Iterable<Channel> getAllChannels(){
+        return db.findAllChannels();
+    }
+    
+    public Channel getChannelById(int id){
+        for(Channel c: db.findAllChannels()){
+            if(c.getId() == id){
+                return c;
+            }
+        }
+        return null;
+    }
+  
 
-    public Channel createChannel(String channelName) {
-        Channel channel = db.createChannel(channelName);
-        return channel;
+    public Channel createChannel(String channelName, User owner) {
+        return db.createChannel(channelName, owner);
     }
 
     public User createUser(String userName, String password) {
@@ -57,7 +74,8 @@ public class ChadChat {
                 "SYSTEM",
                 null,
                 true, null, null ),
-                msg);
+                msg,
+                getChannelById(1));
     }
 
     public synchronized void logout(User user, Socket socket) {
@@ -82,7 +100,7 @@ public class ChadChat {
         createMessage(new User(1,
                 "SYSTEM",
                 null,
-                true, null, null ),blockedMsg);
+                true, null, null ),blockedMsg,getChannelById(1));
     }
     
     public synchronized void removeBlocked(User user) {
@@ -107,8 +125,8 @@ public class ChadChat {
     }
     
 
-    public void createMessage(User user, String msg) {
-        db.createMessage(msg, user);
+    public void createMessage(User user, String msg, Channel channel) {
+        db.createMessage(msg, user, channel);
         synchronized (this) {
             for (MessageObserver messageObserver : messageObservers) {
                 messageObserver.notifyNewMessages();

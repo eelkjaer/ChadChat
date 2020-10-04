@@ -37,7 +37,7 @@ public class Client implements Runnable, ChadChat.MessageObserver {
     }
     
     public void stopServer(){
-        server.stopServer();
+        Server.stopServer();
     }
     
     private String timestamp(){
@@ -51,9 +51,11 @@ public class Client implements Runnable, ChadChat.MessageObserver {
     @Override
     public void notifyNewMessages() {
         for (Message m : chadChat.getNewMessages(lastSeenMsg)) {
-            out.println(m);
-            out.flush();
-            lastSeenMsg = m.getId();
+            if(m.getChannel().equals(chadChat.getCurChannel())){
+                out.println(m);
+                out.flush();
+                lastSeenMsg = m.getId();
+            }
         }
     }
     

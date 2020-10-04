@@ -1,6 +1,5 @@
 package chadchat.infrastructure;
 
-import chadchat.UI.Menu;
 import chadchat.domain.Channel.Channel;
 import chadchat.domain.Message.Message;
 import chadchat.domain.Message.MessageExists;
@@ -22,7 +21,7 @@ public class Database implements MessageRepository {
     static final String PASS = "familiebil";
 
     // Database version
-    private static final int version = 2;
+    private static final int version = 3;
 
     public Database() {
         if (getCurrentVersion() != getVersion()) {
@@ -134,14 +133,15 @@ public class Database implements MessageRepository {
     }
 
 
-    public Channel createChannel(String channelName) {
+    public Channel createChannel(String channelName, User owner) {
         int id = -1;
         try (Connection conn = Database.getConnection()) {
             String sql;
-            sql = "INSERT INTO Channels(name) VALUES (?)";
+            sql = "INSERT INTO Channels(name, ownerId) VALUES (?, ?)";
 
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, channelName);
+            stmt.setInt(2,owner.getId());
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
@@ -175,25 +175,20 @@ public class Database implements MessageRepository {
     private Channel loadChannel(ResultSet rs) throws SQLException {
         return new Channel(
                 rs.getInt("channels.id"),
-                rs.getString("channels.name"));
-                // rs.getTimestamp("channels.timestamp").toLocalDateTime());
-        // rs.getBytes("users.salt"),
-        // rs.getBytes("users.secret"));
+                rs.getString("channels.name"),
+                findUser(rs.getInt("channels.ownerid"))
+                );
     }
 
-    // Load in Channels to channelListS
+    // Load in Channels to channelList
     //@Override
-    public Iterable<Channel> findAllChannels(int id) {
+    public Iterable<Channel> findAllChannels() {
         try (Connection conn = getConnection()) {
-            PreparedStatement s = conn.prepareStatement("SELECT * FROM Channels WHERE id>?;");
-            s.setInt(1, id);
+            PreparedStatement s = conn.prepareStatement("SELECT * FROM Channels;");
             ResultSet rs = s.executeQuery();
             ArrayList<Channel> channelList = new ArrayList<>();
             while(rs.next()) {
                 channelList.add(loadChannel(rs));
-            }
-            for (Channel x: channelList) {
-
             }
             return channelList;
         } catch (SQLException e) {
@@ -223,9 +218,8 @@ public class Database implements MessageRepository {
                 rs.getInt("messages.id"),
                 rs.getString("messages.messageText"),
                 rs.getTimestamp("messages.timestamp").toLocalDateTime(),
-                findUser(rs.getInt("messages.userid")));
-        // rs.getBytes("users.salt"),
-        // rs.getBytes("users.secret"));
+                findUser(rs.getInt("messages.userid")),
+                findChannel(rs.getInt(("messages.channelId"))));
     }
     
     @Override
@@ -245,16 +239,17 @@ public class Database implements MessageRepository {
     }
     
     @Override
-    public Message createMessage(String messageText, User user) {
+    public Message createMessage(String messageText, User user, Channel channel) {
         int id;
         try (Connection conn = getConnection()) {
             var ps =
                     conn.prepareStatement(
-                            "INSERT INTO Messages (messageText, userid) " +
-                                    "VALUE (?,?);",
+                            "INSERT INTO Messages (messageText, userid, channelId) " +
+                                    "VALUE (?,?,?);",
                             Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, messageText);
             ps.setInt(2,user.getId());
+            ps.setInt(3,channel.getId());
             try {
                 ps.executeUpdate();
             } catch (SQLIntegrityConstraintViolationException e) {
