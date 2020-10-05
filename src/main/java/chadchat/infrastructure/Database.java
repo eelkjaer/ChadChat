@@ -105,7 +105,7 @@ public class Database implements MessageRepository {
     public User findUser(int id) throws NoSuchElementException {
         try(Connection conn = getConnection()) {
             PreparedStatement s = conn.prepareStatement(
-                    "SELECT * FROM user WHERE id = ?;");
+                    "SELECT * FROM User WHERE id = ?;");
             s.setInt(1, id);
             ResultSet rs = s.executeQuery();
             if(rs.next()) {
@@ -122,12 +122,12 @@ public class Database implements MessageRepository {
 
     private User loadUser(ResultSet rs) throws SQLException {
         return new User(
-                rs.getInt("user.id"),
-                rs.getString("user.userName"),
-                rs.getTimestamp("user.timestamp").toLocalDateTime(),
-                rs.getBoolean("user.admin"),
-                rs.getBytes("user.salt"),
-                rs.getBytes("user.secret"));
+                rs.getInt("User.id"),
+                rs.getString("User.userName"),
+                rs.getTimestamp("User.timestamp").toLocalDateTime(),
+                rs.getBoolean("User.admin"),
+                rs.getBytes("User.salt"),
+                rs.getBytes("User.secret"));
     }
 
 
@@ -156,7 +156,7 @@ public class Database implements MessageRepository {
     public Channel findChannel(int id) throws NoSuchElementException {
         try(Connection conn = getConnection()) {
             PreparedStatement s = conn.prepareStatement(
-                    "SELECT * FROM channels WHERE id = ?;");
+                    "SELECT * FROM Channels WHERE id = ?;");
             s.setInt(1, id);
             ResultSet rs = s.executeQuery();
             if(rs.next()) {
@@ -172,9 +172,9 @@ public class Database implements MessageRepository {
 
     private Channel loadChannel(ResultSet rs) throws SQLException {
         return new Channel(
-                rs.getInt("channels.id"),
-                rs.getString("channels.name"),
-                findUser(rs.getInt("channels.ownerid"))
+                rs.getInt("Channels.id"),
+                rs.getString("Channels.name"),
+                findUser(rs.getInt("Channels.ownerid"))
                 );
     }
 
@@ -197,7 +197,7 @@ public class Database implements MessageRepository {
     public Message findMessage(int id) throws NoSuchElementException {
         try(Connection conn = getConnection()) {
             PreparedStatement s = conn.prepareStatement(
-                    "SELECT * FROM messages WHERE id = ?;");
+                    "SELECT * FROM Messages WHERE id = ?;");
             s.setInt(1, id);
             ResultSet rs = s.executeQuery();
             if(rs.next()) {
@@ -213,11 +213,11 @@ public class Database implements MessageRepository {
 
     private Message loadMessage(ResultSet rs) throws SQLException {
         return new Message(
-                rs.getInt("messages.id"),
-                rs.getString("messages.messageText"),
-                rs.getTimestamp("messages.timestamp").toLocalDateTime(),
-                findUser(rs.getInt("messages.userid")),
-                findChannel(rs.getInt(("messages.channelId"))));
+                rs.getInt("Messages.id"),
+                rs.getString("Messages.messageText"),
+                rs.getTimestamp("Messages.timestamp").toLocalDateTime(),
+                findUser(rs.getInt("Messages.userid")),
+                findChannel(rs.getInt(("Messages.channelId"))));
     }
     
     @Override

@@ -875,82 +875,160 @@
       <Host>%</Host>
     </user>
     <table id="277" parent="2" name="Channels"/>
-    <table id="278" parent="2" name="User"/>
-    <table id="279" parent="2" name="UserMessages"/>
-    <column id="280" parent="277" name="id">
+    <table id="278" parent="2" name="Messages"/>
+    <table id="279" parent="2" name="User"/>
+    <table id="280" parent="2" name="properties"/>
+    <column id="281" parent="277" name="id">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="281" parent="277" name="name">
+    <column id="282" parent="277" name="name">
       <Position>2</Position>
-      <DataType>varchar(15)|0s</DataType>
+      <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="282" parent="277" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <foreign-key id="283" parent="277" name="fk_Channels_Messages_1">
-      <ColNames>id</ColNames>
-      <RefTableName>Messages</RefTableName>
-      <RefColNames>channelId</RefColNames>
-    </foreign-key>
-    <column id="284" parent="278" name="id">
-      <Position>1</Position>
-      <DataType>int|0s</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="285" parent="278" name="username">
-      <Position>2</Position>
-      <DataType>varchar(15)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="286" parent="278" name="createdAt">
+    <column id="283" parent="277" name="ownerId">
       <Position>3</Position>
-      <DataType>datetime|0s</DataType>
-      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="287" parent="278" name="PRIMARY">
+    <index id="284" parent="277" name="channelOwner">
+      <ColNames>ownerId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="285" parent="277" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="288" parent="279" name="userId">
-      <Position>1</Position>
-      <DataType>int|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="289" parent="279" name="messageId">
-      <Position>2</Position>
-      <DataType>int|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="290" parent="279" name="userIdKey">
-      <ColNames>userId</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="291" parent="279" name="msgIdKey">
-      <ColNames>messageId</ColNames>
-      <Type>btree</Type>
-    </index>
-    <foreign-key id="292" parent="279" name="userIdKey">
-      <ColNames>userId</ColNames>
+    <foreign-key id="286" parent="277" name="channelOwner">
+      <ColNames>ownerId</ColNames>
       <RefTableName>User</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="293" parent="279" name="msgIdKey">
-      <ColNames>messageId</ColNames>
-      <RefTableName>Messages</RefTableName>
+    <column id="287" parent="278" name="id">
+      <Position>1</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="288" parent="278" name="messageText">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="289" parent="278" name="timestamp">
+      <Position>3</Position>
+      <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="290" parent="278" name="userid">
+      <Position>4</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="291" parent="278" name="channelId">
+      <Position>5</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>1</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="292" parent="278" name="userIdMsg">
+      <ColNames>userid</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="293" parent="278" name="channelIdMsg">
+      <ColNames>channelId</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="294" parent="278" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="295" parent="278" name="userIdMsg">
+      <ColNames>userid</ColNames>
+      <RefTableName>User</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="296" parent="278" name="channelIdMsg">
+      <ColNames>channelId</ColNames>
+      <RefTableName>Channels</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
+    <column id="297" parent="279" name="id">
+      <Position>1</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="298" parent="279" name="userName">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="299" parent="279" name="timestamp">
+      <Position>3</Position>
+      <DataType>timestamp|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="300" parent="279" name="admin">
+      <Position>4</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>0</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="301" parent="279" name="salt">
+      <Position>5</Position>
+      <DataType>blob|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="302" parent="279" name="secret">
+      <Position>6</Position>
+      <DataType>blob|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="303" parent="279" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="304" parent="280" name="name">
+      <Position>1</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="305" parent="280" name="value">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="306" parent="280" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>name</ColNames>
+      <Primary>1</Primary>
+    </key>
   </database-model>
 </dataSource>
