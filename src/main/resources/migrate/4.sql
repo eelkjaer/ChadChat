@@ -108,7 +108,7 @@ CREATE TABLE `properties` (
 -- Records of properties
 -- ----------------------------
 BEGIN;
-INSERT INTO `properties` VALUES ('version', '3');
+INSERT INTO `properties` VALUES ('version', '4');
 COMMIT;
 
 -- ----------------------------

@@ -16,7 +16,7 @@ CREATE TABLE User (
     PRIMARY KEY (id)
 );
 
-INSERT INTO user (userName) VALUES ("Peter");
+INSERT INTO User (userName) VALUES ("Peter");
 
 DROP TABLE IF EXISTS Messages;
 CREATE TABLE Messages (
@@ -26,7 +26,7 @@ CREATE TABLE Messages (
     PRIMARY KEY (id)
 );
 
-INSERT INTO messages (messageText) VALUES ("Test chat-text");
+INSERT INTO Messages (messageText) VALUES ("Test chat-text");
 
 
 UPDATE properties

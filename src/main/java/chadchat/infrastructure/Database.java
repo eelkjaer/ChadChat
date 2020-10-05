@@ -12,14 +12,14 @@ import java.util.*;
 public class Database implements MessageRepository {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/ChadChat?serverTimezone=" + TimeZone.getDefault().getID();
+    static final String DB_URL = "jdbc:mysql://localhost/chadchat?serverTimezone=" + TimeZone.getDefault().getID();
 
     // Database credentials
     static final String USER = "chadchat";
-    static final String PASS = "familiebil";
+    // static final String PASS = "familiebil";
 
     // Database version
-    private static final int version = 3;
+    private static final int version = 4;
 
     public Database() {
         if (getCurrentVersion() != getVersion()) {
@@ -46,7 +46,7 @@ public class Database implements MessageRepository {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASS);
+        return DriverManager.getConnection(DB_URL, USER, null);
 
     }
 

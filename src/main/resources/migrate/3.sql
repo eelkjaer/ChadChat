@@ -48,7 +48,7 @@ INSERT INTO `Messages` VALUES (63, 'hej', '2020-10-01 19:45:23', 3);
 INSERT INTO `Messages` VALUES (64, 'dav', '2020-10-01 19:45:33', 3);
 INSERT INTO `Messages` VALUES (65, 'hejsa', '2020-10-01 19:45:39', 3);
 INSERT INTO `Messages` VALUES (66, 'hej', '2020-10-01 19:45:44', 2);
-INSERT INTO `Messages` VALUES (67, 'hvordan gC%r det', '2020-10-01 19:45:51', 3);
+INSERT INTO `Messages` VALUES (67, 'hvordan går det', '2020-10-01 19:45:51', 3);
 INSERT INTO `Messages` VALUES (68, 'hej', '2020-10-01 20:10:15', 2);
 INSERT INTO `Messages` VALUES (69, 'ok', '2020-10-01 20:25:06', 3);
 INSERT INTO `Messages` VALUES (70, 'hej', '2020-10-01 21:12:41', 4);
@@ -69,7 +69,7 @@ CREATE TABLE `properties` (
 -- Records of properties
 -- ----------------------------
 BEGIN;
-INSERT INTO `properties` VALUES ('version', '2');
+INSERT INTO `properties` VALUES ('version', '3');
 COMMIT;
 
 -- ----------------------------
